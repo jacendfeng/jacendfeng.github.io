@@ -1,0 +1,826 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java basic,RPC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言背景介绍RMI是Java的一组拥护开发分布式应用程序的API。RMI使用Java语言接口定义了远程对象，它集合了Java序列化和Java远程方法协议(Java Remote Method Protocol)。
+
+Java远程方法协议（英语：Java Remote Method Protocol，JRMP）是特定于Java技术的、用于查找和引用远程对象的协议。这是运行在Java远程方法调用（RM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的RMI学习笔记(1)">
+<meta property="og:url" content="http://yoursite.com/2016/02/06/我的RMI学习笔记-1/index.html">
+<meta property="og:site_name" content="Private Plots">
+<meta property="og:description" content="前言背景介绍RMI是Java的一组拥护开发分布式应用程序的API。RMI使用Java语言接口定义了远程对象，它集合了Java序列化和Java远程方法协议(Java Remote Method Protocol)。
+
+Java远程方法协议（英语：Java Remote Method Protocol，JRMP）是特定于Java技术的、用于查找和引用远程对象的协议。这是运行在Java远程方法调用（RM">
+<meta property="og:image" content="https://segmentfault.com/img/bVs0AY">
+<meta property="og:image" content="https://segmentfault.com/img/bVs0Ba">
+<meta property="og:image" content="https://segmentfault.com/img/bVs0Iq">
+<meta property="og:image" content="https://segmentfault.com/img/bVs09M">
+<meta property="og:image" content="https://segmentfault.com/img/bVs1ag">
+<meta property="og:image" content="https://segmentfault.com/img/bVs0Ld">
+<meta property="og:image" content="https://segmentfault.com/img/bVs1ez">
+<meta property="og:image" content="https://segmentfault.com/img/bVs1iG">
+<meta property="og:image" content="https://segmentfault.com/img/bVs1hR">
+<meta property="og:image" content="https://segmentfault.com/img/bVs1jn">
+<meta property="og:updated_time" content="2016-06-25T09:26:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的RMI学习笔记(1)">
+<meta name="twitter:description" content="前言背景介绍RMI是Java的一组拥护开发分布式应用程序的API。RMI使用Java语言接口定义了远程对象，它集合了Java序列化和Java远程方法协议(Java Remote Method Protocol)。
+
+Java远程方法协议（英语：Java Remote Method Protocol，JRMP）是特定于Java技术的、用于查找和引用远程对象的协议。这是运行在Java远程方法调用（RM">
+<meta name="twitter:image" content="https://segmentfault.com/img/bVs0AY">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/02/06/我的RMI学习笔记-1/"/>
+
+  <title> 我的RMI学习笔记(1) | Private Plots </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Private Plots</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">平凡生活里的英雄梦想</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '2CoWrVS7trX42SYK44FB','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                我的RMI学习笔记(1)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-02-06T17:14:29+08:00" content="2016-02-06">
+              2016-02-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/coding/" itemprop="url" rel="index">
+                    <span itemprop="name">coding</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/06/我的RMI学习笔记-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/06/我的RMI学习笔记-1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>RMI是Java的一组拥护开发分布式应用程序的API。RMI使用Java语言接口定义了远程对象，它集合了Java序列化和Java远程方法协议(Java Remote Method Protocol)。</p>
+<blockquote>
+<p>Java远程方法协议（英语：Java Remote Method Protocol，JRMP）是特定于Java技术的、用于查找和引用远程对象的协议。这是运行在Java远程方法调用（RMI）之下、TCP/IP之上的线路层协议</p>
+</blockquote>
+<p>通过RMI技术，本地虚拟机JVM可以调用存在于另外一个JVM中的对象方法，就好像该虚拟机调用存在于本地JVM的某个对象方法一样。而另外一个JVM可以与本地JVM在同一台物理机，也可以属于不同的物理机。<br><a id="more"></a></p>
+<p>常见的可以实现远程调用的技术还包括了 RPC，CORBA，Web Service，这里不一一介绍，需要了解的同学可以 google，以下只关注 RMI 这个只针对 Java 语言的远程调用技术的一些阐述。</p>
+<h2 id="RMI技术变迁"><a href="#RMI技术变迁" class="headerlink" title="RMI技术变迁"></a>RMI技术变迁</h2><p>RMI技术早在JDK1.1中就出现了，并且在JDK1.5版本做了重大改进，使得我们可以更加简单的使用RMI技术来支持分布式应用。关于详细的技术变更历史，可以参见官方的 <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/rmi/relnotes.html" target="_blank" rel="external">Java RMI release Note</a>。</p>
+<h2 id="RMI基本实现说明"><a href="#RMI基本实现说明" class="headerlink" title="RMI基本实现说明"></a>RMI基本实现说明</h2><p>我们希望在两个JVM虚拟机远程方法调用可以以常规方法进行调用，而无需关心数据的发送接收以及解析之类的问题。解决的思路是，在客户端安装一个代理（proxy），代理是位于客户端虚拟机中的一个对象，他对于客户端对象，看起来就像访问的远程对象一样，客户端代理会使用网络协议与服务器进行通信。同样的实现的服务端代码的程序员也不希望需要手动编码对客户端的调用进行复杂的处理，所以在服务器端也会有一个代理对象来进行通信的繁琐工作。<br><img src="https://segmentfault.com/img/bVs0AY" alt="图片描述"><br>在RMI中，客户端的代理对象被称为存根（Stub），存根位于客户端机器上，它知道如何通过网络与服务器联系。存根会将远程方法所需的参数打包成一组字节。对参数编码的过程被称为参数编组（parameter marshalling），参数编组的目的是将参数转换成适合在虚拟机之间进行传递的形式。在RMI协议中，对象时使用序列化机制进行编码的。</p>
+<p>总的来说，客户端的存根方法构造了一个信息块，它由以下几部分组成</p>
+<ul>
+<li>被使用的远程对象的标识符</li>
+<li>被调用的方法的描述</li>
+<li>编组后的参数</li>
+</ul>
+<p>然后，存根将此信息发送给服务器。在服务器的一端，接收器对象执行以下动作：</p>
+<ol>
+<li>定位要调用的远程对象</li>
+<li>调用所需的方法，并传递客户端提供的参数</li>
+<li>捕获返回值或调用产生的异常。</li>
+<li>将返回值编组，打包送回给客户端存根</li>
+</ol>
+<p>客户端存根对来自服务器端的返回值或异常进行反编组，其结果就成为了调用存根返回值。</p>
+<p><img src="https://segmentfault.com/img/bVs0Ba" alt="图片描述"></p>
+<h2 id="几个重要概念说明"><a href="#几个重要概念说明" class="headerlink" title="几个重要概念说明"></a>几个重要概念说明</h2><h3 id="RMI-注册表（参见-LocateRegistry-类）"><a href="#RMI-注册表（参见-LocateRegistry-类）" class="headerlink" title="RMI 注册表（参见 LocateRegistry 类）"></a>RMI 注册表（参见 LocateRegistry 类）</h3><ol>
+<li>为了使得客户端能够查找到服务端对外提供的远程对象，RMI需要维护一个RMI注册表，该注册表维护了对于客户端而言的远程对象位置，对外提供了服务，服务端需要将要外提供服务的对象的代理绑定到RMI注册表中。</li>
+<li>RMI注册表可以跟服务端不在一台主机上。</li>
+<li>RMI注册表的启动有两种方式：一种是通过命令行 rmiregistry $port 在命令行启动；另外一种是通过 LocateRegistry 类的 createRegistry(int port) 方法启动。</li>
+</ol>
+<h3 id="客户端查找远程对象，服务端注册远程对象的多样性"><a href="#客户端查找远程对象，服务端注册远程对象的多样性" class="headerlink" title="客户端查找远程对象，服务端注册远程对象的多样性"></a>客户端查找远程对象，服务端注册远程对象的多样性</h3><p>也许在网上查看各种RMI示例代码时我们常常发现客户端查找远程对象，服务端注册远程对象使用的代码都不尽相同，我在学习过程中见到的有三种途径：</p>
+<ol>
+<li>LocateRegistry 类的对象的 rebind() 和 lookup() 来实现绑定注册和查找远程对象的</li>
+<li>利用命名服务 java.rmi.Naming 类的 rebind() 和 lookup() 来实现绑定注册和查找远程对象的 </li>
+<li>利用JNDI(Java Naming and Directory Interface,Java命名和目录接口) java.naming.InitialContext 类来 rebind() 和 lookup() 来实现绑定注册和查找远程对象的 </li>
+</ol>
+<p>实际上 java.rmi.Naming 类的 rebind() 和 lookup()方法只是在 LocateRegistry 类的包了一层皮，大家可以查看该类的源码。</p>
+<h3 id="RMI涉及到安全机制方面的问题"><a href="#RMI涉及到安全机制方面的问题" class="headerlink" title="RMI涉及到安全机制方面的问题"></a>RMI涉及到安全机制方面的问题</h3><p>看到这篇文章的同学也许已经在本机上地运行了网上某些示例代码，然而在本机环境中的成功运行，实际上对于真正的分布式应用来说是缺乏真实的参照性的，我在完成本机运行后实际上对于RMI的认识还是非常肤浅的，而网络上对于在服务端和客户端程序运行的两台不同物理主机的RMI示例内容很少，而Oracel提供的官方文档 <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/rmi/" target="_blank" rel="external">JDK 1.5的RMI教程</a> <a href="http://docs.oracle.com/javase/tutorial/rmi/overview.html" target="_blank" rel="external">最新的教程</a> 也没有一个可以让我完美地在两台机器上跑起来。<br>对于在本机运行客户端、服务端以及RMI注册表服务不涉及到安全性问题，当我们把客户端的代码扔到另一台物理机，首先遇到的问题是 no security manager: RMI class loader disable; 这个问题，这时，我们需要做的首先是了解 Java 的安全机制中涉及到 SecurityManager 类和安全策略文件 policy 的写法和各个字段的含义。</p>
+<p>SecurityManager 的加入方式：</p>
+<ol>
+<li><p>在编码中加入<br>  System.setSecurityManager(new SecurityManager());</p>
+</li>
+<li><p>在命令行中加入<br> java -Djava.security.manager </p>
+</li>
+</ol>
+<p>既然加入了安全管理器，那么也需要对应的安全策略文件，如果主动指定策略文件，将使用默认策略文件：</p>
+<ol>
+<li><p>在编码中加入</p>
+<p> System.setProperty(“java.security.policy”, “策略文件路径”)</p>
+</li>
+<li><p>在命令行加入</p>
+<p> java -Djava.security.policy=MyApp.policy</p>
+</li>
+</ol>
+<p>关于 policy 文件的形式说明：</p>
+<pre><code>grant codesource{
+    permission1;
+    permission2;
+    ...
+};
+
+codesource 的一般形式是 codeBase &quot;url地址&quot;
+基本含义是赋予 codesource 中的代码 permission1, permission2 ... 等权限
+如果省略的 codesource 如下面这样，说明 permission 权限被赋予给了所有代码
+grant{
+    permission1;
+} 
+</code></pre><h3 id="远程类文件的加载"><a href="#远程类文件的加载" class="headerlink" title="远程类文件的加载"></a>远程类文件的加载</h3><p>在两台不同的物理主机部署RMI程序时碰到的另外常见问题是 ClassNotFoundException, 这个问题产生的原因对于客户端来说有3个：</p>
+<ol>
+<li>本机运行的客户端的客户端代码 -classpath 的指定问题。</li>
+<li>本机运行的客户端代码中需要跟服务端代码同步的部分不一致，RMI运行过程中会检查一致性，比如 Remote 接口的代码与服务端不一致，我在部署过程中服务端的远程接口是位于包中，而我在客户端的远程接口代码我为了图方便自己写的，结果没有在包中，最后在解决了 securityManager 问题后一直卡在这里，最后发现了包名出现在异常中，索性将服务端代码都放到默认包中了，问题立马解决了。</li>
+<li>RMI运行时客户端有时需要从远端获取.class文件（由于本地 classpath 中没有，而远程方法中的参数或则返回值包含了可序列化的对象，此时RMI可以通过网络从指定路径获取），参见<a href="http://docs.oracle.com/javase/1.5.0/docs/guide/rmi/codebase.html" target="_blank" rel="external">使用RMI进行动态代码下载</a><br>  使用 -Djava.rmi.server.codebase= <a href="http://webvector/export/（示例地址）" target="_blank" rel="external">http://webvector/export/（示例地址）</a> 来指定</li>
+</ol>
+<p>实际上客户端，服务端，RMI注册表，公共类文件可以分别位于不同主机上，此时涉及到的 ClassNotFoundException 则会更加多，这里不在赘述，出错的原因都是类似的，客户端，服务端，RMI注册程序运行时都可以指定 -Djava.rmi.server.codebase=<a href="http://webvector/export/（示例地址）" target="_blank" rel="external">http://webvector/export/（示例地址）</a> 参数<br><img src="https://segmentfault.com/img/bVs0Iq" alt="图片描述"></p>
+<h1 id="开始动手"><a href="#开始动手" class="headerlink" title="开始动手"></a>开始动手</h1><p>为了避免包结构带来的干扰，下面代码不在包结构中</p>
+<h2 id="在同一台主机上部署RMI程序"><a href="#在同一台主机上部署RMI程序" class="headerlink" title="在同一台主机上部署RMI程序"></a>在同一台主机上部署RMI程序</h2><h3 id="定义一个远程对象的接口"><a href="#定义一个远程对象的接口" class="headerlink" title="定义一个远程对象的接口"></a>定义一个远程对象的接口</h3><figure class="highlight actionscript"><table><tr><td class="code"><pre><span class="line"><span class="meta"><span class="meta-keyword">import</span> java.rmi.Remote;</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> java.rmi.RemoteException;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Hello</span> <span class="keyword">extends</span> <span class="title">Remote</span></span>&#123; <span class="comment">// 远程对象的接口必须拓展 java.rmi.Remote 接口</span></span><br><span class="line">	String sayHello() throws RemoteException; <span class="comment">// 接口中所有方法必须抛出 RemoteException 异常， 因为远程调用缺乏可靠性，总是存在失败的可能。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="接口的实现类以及服务端代码"><a href="#接口的实现类以及服务端代码" class="headerlink" title="接口的实现类以及服务端代码"></a>接口的实现类以及服务端代码</h3><p>这里方便起见将远程对象接口的实现类和服务端代码放在一起，实际上已经分开，这不是重点</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.rmi.registry.LocateRegistry;</span><br><span class="line"><span class="keyword">import</span> java.rmi.registry.Registry;</span><br><span class="line"><span class="keyword">import</span> java.rmi.server.UnicastRemoteObject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Server</span> <span class="keyword">implements</span> <span class="title">Hello</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Server</span><span class="params">()</span></span>&#123;<span class="keyword">super</span>();&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//The implementation class Server implements the remote interface Hello,</span></span><br><span class="line">	<span class="comment">//providing an implementation for the remote method sayHello. The method sayHello does not need to declare that it throws any exception because the method implementation itself does not throw RemoteException nor does it throw any other checked exceptions. </span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Hello, world"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">// 创建本机 1099 端口上的RMI registry</span></span><br><span class="line">			Registry registry = LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">		    </span><br><span class="line">		    <span class="comment">// jdk 1.5 以后利用 UnicastRemoteObject 动态生成 Stub</span></span><br><span class="line">		    <span class="comment">// jdk 1.5 之前需要使用 rmic 命令来创建</span></span><br><span class="line">			Server obj = <span class="keyword">new</span> Server();</span><br><span class="line">			Hello stub = (Hello) UnicastRemoteObject.exportObject(obj, <span class="number">1099</span>);</span><br><span class="line">    		<span class="comment">// 有些RMI示例代码会让接口实现类直接继承自 UnicastRemoteObject ，效果是一样的，参见 UnicastRemoteObject 的构造函数，或则在接口实现类构造函数中做这个工作也可以</span></span><br><span class="line"></span><br><span class="line">			<span class="comment">// 将 Stub 绑定到RMI注册表中，方式多样，上文已经提过</span></span><br><span class="line">			registry.bind(<span class="string">"Hello"</span>, stub);</span><br><span class="line">			</span><br><span class="line">			System.err.println(<span class="string">"Server ready"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			System.err.println(<span class="string">"Server exception: "</span> + e.toString());</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="客户端代码"><a href="#客户端代码" class="headerlink" title="客户端代码"></a>客户端代码</h3><figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">import java.rmi.registry.LocateRegistry;</span><br><span class="line">import java.rmi.registry.Registry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="built_in">Client</span> &#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">Client</span>()&#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args)&#123;</span><br><span class="line">    	<span class="keyword">String</span> host = (args.length &lt; <span class="number">1</span>) ? null : args[<span class="number">0</span>];</span><br><span class="line">		<span class="keyword">String</span> port = (args.length &lt; <span class="number">2</span>) ? <span class="string">"1099"</span> : args[<span class="number">1</span>];</span><br><span class="line">		<span class="built_in">try</span>&#123;</span><br><span class="line">            <span class="comment">// 获取 host 主机 port 端口上的 RMI 注册表引用，参数是程序运行参数</span></span><br><span class="line">			Registry registry = LocateRegistry.getRegistry(host, Integer.<span class="built_in">parseInt</span>(port));</span><br><span class="line">			<span class="comment">// 获取远程对象存根，方式多样，上文已经提过</span></span><br><span class="line">            Hello stub = (Hello) registry.lookup(<span class="string">"Hello"</span>);</span><br><span class="line">            <span class="comment">// 调用远程方法</span></span><br><span class="line">			<span class="keyword">String</span> response = stub.sayHello();</span><br><span class="line">			System.out.<span class="built_in">println</span>(<span class="string">"response: "</span> + response);</span><br><span class="line">		&#125;<span class="built_in">catch</span>(Exception e)&#123;</span><br><span class="line">			System.err.<span class="built_in">println</span>(<span class="string">"Client exception: "</span> + e.toString());</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="编译运行"><a href="#编译运行" class="headerlink" title="编译运行"></a>编译运行</h3><p>Server 运行结果<br><img src="https://segmentfault.com/img/bVs09M" alt="图片描述"></p>
+<p>Client 运行参数（在Eclipse中 Run configiurations 中设置，也可以在命令行界面直接指定<br><img src="https://segmentfault.com/img/bVs1ag" alt="图片描述"><br>Client 运行结果<br><img src="https://segmentfault.com/img/bVs0Ld" alt="图片描述"></p>
+<h2 id="在不同主机上部署RMI程序"><a href="#在不同主机上部署RMI程序" class="headerlink" title="在不同主机上部署RMI程序"></a>在不同主机上部署RMI程序</h2><h3 id="服务端代码的更改-添加SecurityManager"><a href="#服务端代码的更改-添加SecurityManager" class="headerlink" title="服务端代码的更改(添加SecurityManager)"></a>服务端代码的更改(添加SecurityManager)</h3><pre><code>import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class Server implements Hello{
+
+    public Server(){super();};
+
+    @Override
+    public String sayHello() {
+        return &quot;Hello, world&quot;;
+    }
+
+    public static void main(String[] args){
+
+        //!!! 新添加了securityManageer !!!
+        if(System.getSecurityManager() == null){
+            System.setSecurityManager(new SecurityManager());
+        } 
+
+        try {
+            // 创建本机 1099 端口上的RMI registry
+            Registry registry = LocateRegistry.createRegistry(1099);
+
+            // jdk 1.5 以后利用 UnicastRemoteObject 动态生成 Stub
+            // jdk 1.5 之前需要使用 rmic 命令来创建
+            Server obj = new Server();
+            Hello stub = (Hello) UnicastRemoteObject.exportObject(obj, 1099);
+            // 有些RMI示例代码会让接口实现类直接继承自 UnicastRemoteObject ，效果是一样的，参见 UnicastRemoteObject 的构造函数，或则在接口实现类构造函数中做这个工作也可以
+
+            // 将 Stub 绑定到RMI注册表中，方式多样，上文已经提过
+            registry.bind(&quot;Hello&quot;, stub);
+
+            System.err.println(&quot;Server ready&quot;);
+        } catch (Exception e) {
+            System.err.println(&quot;Server exception: &quot; + e.toString());
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre><h3 id="客户端代码的更改-添加SecurityManager"><a href="#客户端代码的更改-添加SecurityManager" class="headerlink" title="客户端代码的更改(添加SecurityManager)"></a>客户端代码的更改(添加SecurityManager)</h3><figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">import java.rmi.registry.LocateRegistry;</span><br><span class="line">import java.rmi.registry.Registry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="built_in">Client</span> &#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">Client</span>()&#123;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] args)&#123;</span><br><span class="line">        <span class="comment">//!!! 新添加了securityManageer !!!</span></span><br><span class="line">        <span class="built_in">if</span>(System.getSecurityManager() == null)&#123;</span><br><span class="line">			System.setSecurityManager(<span class="keyword">new</span> SecurityManager());</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">    	<span class="keyword">String</span> host = (args.length &lt; <span class="number">1</span>) ? null : args[<span class="number">0</span>];</span><br><span class="line">		<span class="keyword">String</span> port = (args.length &lt; <span class="number">2</span>) ? <span class="string">"1099"</span> : args[<span class="number">1</span>];</span><br><span class="line">		<span class="built_in">try</span>&#123;</span><br><span class="line">            <span class="comment">// 获取 host 主机 port 端口上的 RMI 注册表引用，参数是程序运行参数</span></span><br><span class="line">			Registry registry = LocateRegistry.getRegistry(host, Integer.<span class="built_in">parseInt</span>(port));</span><br><span class="line">			<span class="comment">// 获取远程对象存根，方式多样，上文已经提过</span></span><br><span class="line">            Hello stub = (Hello) registry.lookup(<span class="string">"Hello"</span>);</span><br><span class="line">            <span class="comment">// 调用远程方法</span></span><br><span class="line">			<span class="keyword">String</span> response = stub.sayHello();</span><br><span class="line">			System.out.<span class="built_in">println</span>(<span class="string">"response: "</span> + response);</span><br><span class="line">		&#125;<span class="built_in">catch</span>(Exception e)&#123;</span><br><span class="line">			System.err.<span class="built_in">println</span>(<span class="string">"Client exception: "</span> + e.toString());</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="编辑一个安全策略文件-rmi-policy"><a href="#编辑一个安全策略文件-rmi-policy" class="headerlink" title="编辑一个安全策略文件 rmi.policy"></a>编辑一个安全策略文件 rmi.policy</h3><figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">grant</span> &#123;</span><br><span class="line">    permission java<span class="selector-class">.security</span><span class="selector-class">.AllPermission</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这里为了避免任何麻烦赋予了所有代码所有权限，实际生产环境下应该仔细对于不同代码考虑各类权限的赋予，在这个示例中方便起见就这样吧。</p>
+<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><h4 id="服务端需要的文件"><a href="#服务端需要的文件" class="headerlink" title="服务端需要的文件"></a>服务端需要的文件</h4><ol>
+<li>Hello.class</li>
+<li>Server.class</li>
+<li>rmi.policy</li>
+</ol>
+<p>最后在服务端主机（win8系统 cmd 命令栏中，文件分布）<br><img src="https://segmentfault.com/img/bVs1ez" alt="图片描述"></p>
+<h3 id="客户端需要的文件"><a href="#客户端需要的文件" class="headerlink" title="客户端需要的文件"></a>客户端需要的文件</h3><ol>
+<li>Hello.class</li>
+<li>Client.class</li>
+<li>rmi.policy<br>最后在客户端主机（unbuntu 系统，终端中，文件分布）<br><img src="https://segmentfault.com/img/bVs1iG" alt="图片描述"></li>
+</ol>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><h4 id="服务端运行"><a href="#服务端运行" class="headerlink" title="服务端运行"></a>服务端运行</h4><p><img src="https://segmentfault.com/img/bVs1hR" alt="图片描述"></p>
+<h4 id="客户端运行"><a href="#客户端运行" class="headerlink" title="客户端运行"></a>客户端运行</h4><p><img src="https://segmentfault.com/img/bVs1jn" alt="图片描述"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于在不同主机上RMI应用的部署，我在学习过程中碰到了各种各样的问题，而上面的简单示例并不能说明其他一些很重要的问题，建议大家查看<a href="http://docs.oracle.com/javase/1.5.0/docs/guide/rmi/faq.html" target="_blank" rel="external">官方FAQ</a>，这里也给出一些比较有参考价值的链接：<br><a href="http://www.blogjava.net/zhenyu33154/articles/320245.html" target="_blank" rel="external">JDK1.5之前做法</a><br><a href="http://blog.csdn.net/yinwenjie/article/details/49120813" target="_blank" rel="external">讲到了jdk1.5后的一些东西</a><br>另外建议大家还是好好看看官方文档，放弃度娘（根本没有有效信息），掏点钱用VPN吧！！！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java-basic/" rel="tag">#Java basic</a>
+          
+            <a href="/tags/RPC/" rel="tag">#RPC</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/31/Java日志系列-SLF4J/" rel="next" title="Java日志系列-SLF4J">
+                <i class="fa fa-chevron-left"></i> Java日志系列-SLF4J
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/01/Java-keywords/" rel="prev" title="Java 关键词">
+                Java 关键词 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/06/我的RMI学习笔记-1/"
+           data-title="我的RMI学习笔记(1)" data-url="http://yoursite.com/2016/02/06/我的RMI学习笔记-1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="爪哇岛主" />
+          <p class="site-author-name" itemprop="name">爪哇岛主</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jacendfeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/feng.jacend" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景介绍"><span class="nav-number">1.1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RMI技术变迁"><span class="nav-number">1.2.</span> <span class="nav-text">RMI技术变迁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RMI基本实现说明"><span class="nav-number">1.3.</span> <span class="nav-text">RMI基本实现说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个重要概念说明"><span class="nav-number">1.4.</span> <span class="nav-text">几个重要概念说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RMI-注册表（参见-LocateRegistry-类）"><span class="nav-number">1.4.1.</span> <span class="nav-text">RMI 注册表（参见 LocateRegistry 类）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端查找远程对象，服务端注册远程对象的多样性"><span class="nav-number">1.4.2.</span> <span class="nav-text">客户端查找远程对象，服务端注册远程对象的多样性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RMI涉及到安全机制方面的问题"><span class="nav-number">1.4.3.</span> <span class="nav-text">RMI涉及到安全机制方面的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程类文件的加载"><span class="nav-number">1.4.4.</span> <span class="nav-text">远程类文件的加载</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开始动手"><span class="nav-number">2.</span> <span class="nav-text">开始动手</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#在同一台主机上部署RMI程序"><span class="nav-number">2.1.</span> <span class="nav-text">在同一台主机上部署RMI程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义一个远程对象的接口"><span class="nav-number">2.1.1.</span> <span class="nav-text">定义一个远程对象的接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口的实现类以及服务端代码"><span class="nav-number">2.1.2.</span> <span class="nav-text">接口的实现类以及服务端代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端代码"><span class="nav-number">2.1.3.</span> <span class="nav-text">客户端代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译运行"><span class="nav-number">2.1.4.</span> <span class="nav-text">编译运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在不同主机上部署RMI程序"><span class="nav-number">2.2.</span> <span class="nav-text">在不同主机上部署RMI程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端代码的更改-添加SecurityManager"><span class="nav-number">2.2.1.</span> <span class="nav-text">服务端代码的更改(添加SecurityManager)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端代码的更改-添加SecurityManager"><span class="nav-number">2.2.2.</span> <span class="nav-text">客户端代码的更改(添加SecurityManager)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编辑一个安全策略文件-rmi-policy"><span class="nav-number">2.2.3.</span> <span class="nav-text">编辑一个安全策略文件 rmi.policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署"><span class="nav-number">2.2.4.</span> <span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端需要的文件"><span class="nav-number">2.2.4.1.</span> <span class="nav-text">服务端需要的文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端需要的文件"><span class="nav-number">2.2.5.</span> <span class="nav-text">客户端需要的文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行"><span class="nav-number">2.2.6.</span> <span class="nav-text">运行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端运行"><span class="nav-number">2.2.6.1.</span> <span class="nav-text">服务端运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端运行"><span class="nav-number">2.2.6.2.</span> <span class="nav-text">客户端运行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.2.7.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爪哇岛主</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jacendfeng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

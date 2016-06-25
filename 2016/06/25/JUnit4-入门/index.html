@@ -1,0 +1,695 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JUnit,测试," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="What is JUnitJUnit is a Regression Testing Framework used by developers to implement unit testing in Java and accelerate programming speed and  increase the quality of code
+features：Fixtures：is a fixe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JUnit4 入门">
+<meta property="og:url" content="http://yoursite.com/2016/06/25/JUnit4-入门/index.html">
+<meta property="og:site_name" content="Private Plots">
+<meta property="og:description" content="What is JUnitJUnit is a Regression Testing Framework used by developers to implement unit testing in Java and accelerate programming speed and  increase the quality of code
+features：Fixtures：is a fixe">
+<meta property="og:updated_time" content="2016-06-25T11:29:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JUnit4 入门">
+<meta name="twitter:description" content="What is JUnitJUnit is a Regression Testing Framework used by developers to implement unit testing in Java and accelerate programming speed and  increase the quality of code
+features：Fixtures：is a fixe">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/25/JUnit4-入门/"/>
+
+  <title> JUnit4 入门 | Private Plots </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Private Plots</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">平凡生活里的英雄梦想</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '2CoWrVS7trX42SYK44FB','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JUnit4 入门
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-25T19:27:51+08:00" content="2016-06-25">
+              2016-06-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/coding/" itemprop="url" rel="index">
+                    <span itemprop="name">coding</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/25/JUnit4-入门/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/25/JUnit4-入门/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="What-is-JUnit"><a href="#What-is-JUnit" class="headerlink" title="What is JUnit"></a>What is JUnit</h2><p>JUnit is a Regression Testing Framework used by developers to implement unit testing in Java and accelerate programming speed and  increase the quality of code</p>
+<h2 id="features："><a href="#features：" class="headerlink" title="features："></a>features：</h2><h4 id="Fixtures："><a href="#Fixtures：" class="headerlink" title="Fixtures："></a>Fixtures：</h4><p>is a fixed state of a set of objects used as a baseline for running tests. The purpose of a test fixture is to ensure that there is a well known and fixed environment in which tests are run so that results are repeatable.<br><a id="more"></a></p>
+<h4 id="Test-suites："><a href="#Test-suites：" class="headerlink" title="Test suites："></a>Test suites：</h4><p>Test suite means bundle a few unit test cases and run it together. In JUnit, both @RunWith and @Suite annotation are used to run the suite test.</p>
+<h4 id="Test-runners："><a href="#Test-runners：" class="headerlink" title="Test runners："></a>Test runners：</h4><p>Test runner is used for executing the test cases. Here is an example which assumes TestJunit test class already exists</p>
+<h4 id="JUnit-classes："><a href="#JUnit-classes：" class="headerlink" title="JUnit classes："></a>JUnit classes：</h4><p>JUnit classes are important classes which is used in writing and testing JUnits. Some of the important classes are：</p>
+<ul>
+<li>Assert which contain a set of assert methods.</li>
+<li>TestCase which contain a test case defines the fixture to run<br>multiple tests.</li>
+<li>TestResult which contain methods to collect the results of executing<br>a test case.</li>
+</ul>
+<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><h4 id="最纯净的例子"><a href="#最纯净的例子" class="headerlink" title="最纯净的例子"></a>最纯净的例子</h4><figure class="highlight actionscript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 测试case写法1：</span></span><br><span class="line"><span class="comment">// 继承TestCase ,测试方法 public void testXXX()&#123;&#125; 形式</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> org.junit.Assert;</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> junit.framework.TestCase;</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestJunit1</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> testAdd()&#123;</span><br><span class="line">		String str = <span class="string">"JUnit is working fine"</span>;</span><br><span class="line">		Assert.assertEquals(<span class="string">"JUnit is working fine"</span>, str);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试case写法2</span></span><br><span class="line"><span class="comment">// 使用@Test 注解</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> org.junit.Assert;</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> org.junit.Test;</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestJunit1</span></span>&#123;</span><br><span class="line">	@Test</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> testAdd()&#123;</span><br><span class="line">		String str = <span class="string">"JUnit is working fine"</span>;</span><br><span class="line">		Assert.assertEquals(<span class="string">"JUnit is working fine"</span>, str);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="comment">// JUnitCore 这里作为门面类用来执行测试用例</span></span><br><span class="line"><span class="comment">// JUnitCore is a facade for running tests. It supports running JUnit 4 tests, </span></span><br><span class="line"><span class="comment">// JUnit 3.8.x tests, and mixtures. To run tests from the command line, run java </span></span><br><span class="line"><span class="comment">// org.junit.runner.JUnitCore TestClass1 TestClass2 .... For one-shot test runs, use the // static method runClasses(Class []). If you want to add special listeners, create an </span></span><br><span class="line"><span class="comment">// instance of org.junit.runner.JUnitCore first and use it to run the tests.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.junit.runner.JUnitCore;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.Result;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.notification.Failure;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestRunner</span> </span>&#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> void main(<span class="type">String</span>[] args) &#123;</span><br><span class="line">      <span class="type">Result</span> result = <span class="type">JUnitCore</span>.runClasses(<span class="type">TestJunit</span>.<span class="keyword">class</span>);</span><br><span class="line">      <span class="keyword">for</span> (<span class="type">Failure</span> failure : result.getFailures()) &#123;</span><br><span class="line">         <span class="type">System</span>.out.<span class="built_in">println</span>(failure.<span class="built_in">toString</span>());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="type">System</span>.out.<span class="built_in">println</span>(result.wasSuccessful());</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="爱上简单注解"><a href="#爱上简单注解" class="headerlink" title="爱上简单注解"></a>爱上简单注解</h4><figure class="highlight less"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 测试类</span></span><br><span class="line">import org<span class="selector-class">.junit</span><span class="selector-class">.After</span>;</span><br><span class="line">import org<span class="selector-class">.junit</span><span class="selector-class">.AfterClass</span>;</span><br><span class="line">import org<span class="selector-class">.junit</span><span class="selector-class">.Before</span>;</span><br><span class="line">import org<span class="selector-class">.junit</span><span class="selector-class">.BeforeClass</span>;</span><br><span class="line">import org<span class="selector-class">.junit</span><span class="selector-class">.Ignore</span>;</span><br><span class="line">import org<span class="selector-class">.junit</span><span class="selector-class">.Test</span>;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">public</span> <span class="selector-tag">class</span> <span class="selector-tag">JunitAnnotation</span> &#123;</span><br><span class="line">    <span class="comment">//Annotating a public static void method with @BeforeClass causes it to be run once before any of the test methods in the class.</span></span><br><span class="line">	<span class="variable">@BeforeClass</span></span><br><span class="line">	public static void beforeClass()&#123;</span><br><span class="line">		System<span class="selector-class">.out</span><span class="selector-class">.println</span>(<span class="string">"in before class"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//This will perform the method after all tests have finished. This can be used to perform clean-up activities.</span></span><br><span class="line">	<span class="variable">@AfterClass</span></span><br><span class="line">	public static void afterClass()&#123;</span><br><span class="line">		System<span class="selector-class">.out</span><span class="selector-class">.println</span>(<span class="string">"in after class"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//Several tests need similar objects created before they can run. Annotating a public void method with @Before causes that method to be run before each Test method.</span></span><br><span class="line">	<span class="variable">@Before</span></span><br><span class="line">	public void before()&#123;</span><br><span class="line">		System<span class="selector-class">.out</span><span class="selector-class">.println</span>(<span class="string">"in before"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//If you allocate external resources in a Before method you need to release them after the test runs. </span></span><br><span class="line">    <span class="comment">//Annotating a public void method with @After causes that method to be run after the Test method.</span></span><br><span class="line">	<span class="variable">@After</span></span><br><span class="line">	public void after()&#123;</span><br><span class="line">		System<span class="selector-class">.out</span><span class="selector-class">.println</span>(<span class="string">"in after"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//The Test annotation tells JUnit that the public void method to which it is attached can be run as a test case.</span></span><br><span class="line">	<span class="variable">@Test</span></span><br><span class="line">	public void test()&#123;</span><br><span class="line">		System<span class="selector-class">.out</span><span class="selector-class">.println</span>(<span class="string">"in test"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//The Ignore annotation is used to ignore the test and that test will not be executed.</span></span><br><span class="line">	<span class="variable">@Ignore</span></span><br><span class="line">	public void ignoreTest()&#123;</span><br><span class="line">		System<span class="selector-class">.out</span><span class="selector-class">.println</span>(<span class="string">"in ignore test"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">我们还是用JUnitCore来运行这个测试：</span><br><span class="line">控制台输出：</span><br><span class="line"><span class="keyword">in</span> <span class="keyword">before</span> <span class="built_in">class</span></span><br><span class="line"><span class="keyword">in</span> <span class="keyword">before</span></span><br><span class="line"><span class="keyword">in</span> test</span><br><span class="line"><span class="keyword">in</span> <span class="keyword">after</span></span><br><span class="line"><span class="keyword">in</span> <span class="keyword">after</span> <span class="built_in">class</span></span><br></pre></td></tr></table></figure>
+<h4 id="豪华套装（TestSuite）"><a href="#豪华套装（TestSuite）" class="headerlink" title="豪华套装（TestSuite）"></a>豪华套装（TestSuite）</h4><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line">先上来两个测试用例</span><br><span class="line">测试用例<span class="number">1</span></span><br><span class="line"><span class="keyword">import</span> org.junit.<span class="type">Assert</span>;</span><br><span class="line"><span class="keyword">import</span> junit.framework.<span class="type">TestCase</span>;</span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">TestJunit1</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    public void testAdd()&#123;</span><br><span class="line">        <span class="type">String</span> str = <span class="string">"JUnit is working fine"</span>;</span><br><span class="line">        <span class="type">Assert</span>.assertEquals(<span class="string">"JUnit is working fine"</span>, str);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">测试用例<span class="number">2</span></span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">TestJunit2</span> </span>&#123;</span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   public <span class="keyword">void</span> testAdd() &#123;</span><br><span class="line">      <span class="comment">//test data</span></span><br><span class="line">      <span class="built_in">int</span> <span class="built_in">num</span>= <span class="number">5</span>;</span><br><span class="line">      <span class="built_in">String</span> temp= <span class="keyword">null</span>;</span><br><span class="line">      <span class="built_in">String</span> str= <span class="string">"Junit is working fine"</span>;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//check for equality</span></span><br><span class="line">      assertEquals(<span class="string">"Junit is working fine2"</span>, str);</span><br><span class="line">      </span><br><span class="line">      <span class="comment">//check for false condition</span></span><br><span class="line">      assertFalse(<span class="built_in">num</span> &gt; <span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//check for not null value</span></span><br><span class="line">      assertNotNull(str);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line">关键在于TestSuite的写法</span><br><span class="line"></span><br><span class="line">方式一：</span><br><span class="line">import junit.framework.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> JunitTestSuite &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(<span class="keyword">String</span>[] a) &#123;</span><br><span class="line">		<span class="comment">// add the test's in the suite</span></span><br><span class="line">		TestSuite suite = <span class="keyword">new</span> TestSuite(TestJunit1.<span class="keyword">class</span>, TestJunit2.<span class="keyword">class</span>, TestJunit3.<span class="keyword">class</span>);</span><br><span class="line">		TestResult result = <span class="keyword">new</span> TestResult();</span><br><span class="line">		suite.<span class="built_in">run</span>(result);</span><br><span class="line">		System.out.<span class="built_in">println</span>(<span class="string">"Number of test cases = "</span> + result.runCount());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">直接就可以跑来了</span><br></pre></td></tr></table></figure>
+<figure class="highlight less"><table><tr><td class="code"><pre><span class="line">方式二（注解形式）：</span><br><span class="line">import org<span class="selector-class">.junit</span><span class="selector-class">.runner</span><span class="selector-class">.RunWith</span>;</span><br><span class="line">import org<span class="selector-class">.junit</span><span class="selector-class">.runners</span><span class="selector-class">.Suite</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">@RunWith</span>(Suite.class)</span><br><span class="line"><span class="variable">@Suite</span>.SuiteClasses(&#123; TestJunit1.class, TestJunit2.class &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// JUnit suite test</span></span><br><span class="line">public class JunitTestSuite &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">然后用JunitCore就可以跑起来了</span><br></pre></td></tr></table></figure>
+<h4 id="参数化测试"><a href="#参数化测试" class="headerlink" title="参数化测试"></a>参数化测试</h4><blockquote>
+<p>Junit 4 has introduced a new feature Parameterized tests.Parameterized<br>tests allow developer to run the same test over and over again using<br>different values. There are five steps, that you need to follow to<br>create  Parameterized tests.</p>
+</blockquote>
+<h4 id="示例代码（校验是否是质数的参数化测试）"><a href="#示例代码（校验是否是质数的参数化测试）" class="headerlink" title="示例代码（校验是否是质数的参数化测试）"></a>示例代码（校验是否是质数的参数化测试）</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 工具类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PrimeNumberChecker</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">validate</span><span class="params">(<span class="keyword">final</span> Integer primeNumber)</span></span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i&lt;(primeNumber / <span class="number">2</span>); i++)&#123;</span><br><span class="line">			<span class="keyword">if</span>(primeNumber % i == <span class="number">0</span>)&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight aspectj"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.assertEquals;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.junit.Before;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> org.junit.runner.RunWith;</span><br><span class="line"><span class="keyword">import</span> org.junit.runners.Parameterized;</span><br><span class="line"></span><br><span class="line"><span class="comment">//步骤一：为准备使用参数化测试的测试类指定特殊的运行器</span></span><br><span class="line"><span class="meta">@RunWith</span>(Parameterized.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PrimeNumberCheckTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//步骤二：为测试类声明几个变量，分别用于存放期望值和测试所用数据。</span></span><br><span class="line">	<span class="keyword">private</span> Integer inputNumber;</span><br><span class="line">	<span class="keyword">private</span> Boolean expectedResult;</span><br><span class="line">	<span class="keyword">private</span> PrimeNumberChecker primeNumberChecker;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Before</span></span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">initialize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		primeNumberChecker = <span class="keyword">new</span> PrimeNumberChecker();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//步骤三：为测试类声明一个带有参数的公共构造函数，并在其中为第二个环节中声明的几个变量赋值。  </span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">PrimeNumberCheckTest</span><span class="params">(Integer inputNumber, Boolean expectedResult)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.inputNumber = inputNumber;</span><br><span class="line">		<span class="keyword">this</span>.expectedResult = expectedResult;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//步骤四：为测试类声明一个使用注解 org.junit.runners.Parameterized.Parameters 修饰的，返回值为  </span></span><br><span class="line">    <span class="comment">//java.util.Collection 的公共静态方法，并在此方法中初始化所有需要测试的参数对。</span></span><br><span class="line">	<span class="meta">@Parameterized</span>.Parameters</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Collection&lt;Object[]&gt; primberNumbers()&#123;</span><br><span class="line">		<span class="function"><span class="keyword">return</span> Arrays.<span class="title">asList</span><span class="params">(<span class="keyword">new</span> Object[][]&#123;</span><br><span class="line">			&#123;<span class="number">2</span>,<span class="keyword">true</span>&#125;,</span><br><span class="line">			&#123;<span class="number">6</span>,<span class="keyword">false</span>&#125;,</span><br><span class="line">			&#123;<span class="number">19</span>,<span class="keyword">true</span>&#125;,</span><br><span class="line">			&#123;<span class="number">22</span>,<span class="keyword">false</span>&#125;,</span><br><span class="line">			&#123;<span class="number">23</span>,<span class="keyword">true</span>&#125;</span><br><span class="line">		&#125;)</span></span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//步骤五：编写测试方法，使用定义的变量作为参数进行测试。</span></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">testPrimeNumberChecker</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"Paramerized Number is : "</span> + inputNumber);</span><br><span class="line">		assertEquals(expectedResult, primeNumberChecker.validate(inputNumber));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JUnit/" rel="tag">#JUnit</a>
+          
+            <a href="/tags/测试/" rel="tag">#测试</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/25/在Ubuntu-12-04-32位系统中编译OpenJDK-7u40/" rel="next" title="在Ubuntu 12.04 32位系统中编译OpenJDK 7u40">
+                <i class="fa fa-chevron-left"></i> 在Ubuntu 12.04 32位系统中编译OpenJDK 7u40
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/25/JUnit4-入门/"
+           data-title="JUnit4 入门" data-url="http://yoursite.com/2016/06/25/JUnit4-入门/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="爪哇岛主" />
+          <p class="site-author-name" itemprop="name">爪哇岛主</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jacendfeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/feng.jacend" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-JUnit"><span class="nav-number">1.</span> <span class="nav-text">What is JUnit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#features："><span class="nav-number">2.</span> <span class="nav-text">features：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Fixtures："><span class="nav-number">2.0.1.</span> <span class="nav-text">Fixtures：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Test-suites："><span class="nav-number">2.0.2.</span> <span class="nav-text">Test suites：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Test-runners："><span class="nav-number">2.0.3.</span> <span class="nav-text">Test runners：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JUnit-classes："><span class="nav-number">2.0.4.</span> <span class="nav-text">JUnit classes：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例代码"><span class="nav-number">3.</span> <span class="nav-text">示例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#最纯净的例子"><span class="nav-number">3.0.1.</span> <span class="nav-text">最纯净的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#爱上简单注解"><span class="nav-number">3.0.2.</span> <span class="nav-text">爱上简单注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#豪华套装（TestSuite）"><span class="nav-number">3.0.3.</span> <span class="nav-text">豪华套装（TestSuite）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数化测试"><span class="nav-number">3.0.4.</span> <span class="nav-text">参数化测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例代码（校验是否是质数的参数化测试）"><span class="nav-number">3.0.5.</span> <span class="nav-text">示例代码（校验是否是质数的参数化测试）</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爪哇岛主</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jacendfeng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

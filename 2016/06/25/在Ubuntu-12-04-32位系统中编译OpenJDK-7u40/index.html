@@ -1,0 +1,701 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java basic,linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="环境准备我的编译环境的为Ubuntu 12.04 32位系统，双核
+OpenJDK 源码通过 Mercurial 代码管理工具下载太慢，这里选择直接下载官网源码包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Ubuntu 12.04 32位系统中编译OpenJDK 7u40">
+<meta property="og:url" content="http://yoursite.com/2016/06/25/在Ubuntu-12-04-32位系统中编译OpenJDK-7u40/index.html">
+<meta property="og:site_name" content="Private Plots">
+<meta property="og:description" content="环境准备我的编译环境的为Ubuntu 12.04 32位系统，双核
+OpenJDK 源码通过 Mercurial 代码管理工具下载太慢，这里选择直接下载官网源码包">
+<meta property="og:updated_time" content="2016-06-25T09:12:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Ubuntu 12.04 32位系统中编译OpenJDK 7u40">
+<meta name="twitter:description" content="环境准备我的编译环境的为Ubuntu 12.04 32位系统，双核
+OpenJDK 源码通过 Mercurial 代码管理工具下载太慢，这里选择直接下载官网源码包">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/25/在Ubuntu-12-04-32位系统中编译OpenJDK-7u40/"/>
+
+  <title> 在Ubuntu 12.04 32位系统中编译OpenJDK 7u40 | Private Plots </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Private Plots</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">平凡生活里的英雄梦想</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '2CoWrVS7trX42SYK44FB','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                在Ubuntu 12.04 32位系统中编译OpenJDK 7u40
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-25T16:33:54+08:00" content="2016-06-25">
+              2016-06-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/coding/" itemprop="url" rel="index">
+                    <span itemprop="name">coding</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/25/在Ubuntu-12-04-32位系统中编译OpenJDK-7u40/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/25/在Ubuntu-12-04-32位系统中编译OpenJDK-7u40/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><p>我的编译环境的为Ubuntu 12.04 32位系统，双核</p>
+<h2 id="OpenJDK-源码"><a href="#OpenJDK-源码" class="headerlink" title="OpenJDK 源码"></a>OpenJDK 源码</h2><p>通过 Mercurial 代码管理工具下载太慢，这里选择直接下载<a href="https://jdk7.java.net/source.html" target="_blank" rel="external">官网源码包</a></p>
+<a id="more"></a>
+<h2 id="Apache-Ant"><a href="#Apache-Ant" class="headerlink" title="Apache Ant"></a>Apache Ant</h2><p>用于执行 Java 编译代码中的 Ant 脚本</p>
+<h2 id="Bootstrap-JDK"><a href="#Bootstrap-JDK" class="headerlink" title="Bootstrap JDK"></a>Bootstrap JDK</h2><p>编译 OpenJDK 需要一个可用的 JDK</p>
+<h2 id="安装依赖软件命令"><a href="#安装依赖软件命令" class="headerlink" title="安装依赖软件命令"></a>安装依赖软件命令</h2><p>打开终端，输入以下命令：<br><figure class="highlight q"><table><tr><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> install build-essential gawk m4 openjdk<span class="number">-6</span>-jdk</span><br><span class="line">libasound2-<span class="built_in">dev</span> libcups2-<span class="built_in">dev</span> libxrender-<span class="built_in">dev</span> xorg-<span class="built_in">dev</span> xutils-<span class="built_in">dev</span></span><br><span class="line">x11proto-print-<span class="built_in">dev</span> binutils libmotif3 libmotif-<span class="built_in">dev</span> ant</span><br></pre></td></tr></table></figure></p>
+<p>如何找不到软件包，可以先执行以下命令：</p>
+<figure class="highlight q"><table><tr><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> <span class="keyword">update</span></span><br></pre></td></tr></table></figure>
+<p>这个命令将会更新可用软件列表</p>
+<h2 id="解压JDK源码"><a href="#解压JDK源码" class="headerlink" title="解压JDK源码"></a>解压JDK源码</h2><p>将源码解压到 /home/jacend/Download/ 目录下面，大家可以自己选择一个合适的目录<br><figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">unzip openjdk-<span class="number">7</span>u40-fcs-src-b43-<span class="number">26</span>_aug_2013,zip <span class="regexp">/home/</span>jacend<span class="regexp">/Download/</span></span><br></pre></td></tr></table></figure></p>
+<p>解压后再 /home/jacend/Download/ 下面会出现一个 openjdk 的源码目录，该目录下包括了jdk,hotspot以及一些Java工具的源码</p>
+<h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><h2 id="创建一个安放编译结果的目录"><a href="#创建一个安放编译结果的目录" class="headerlink" title="创建一个安放编译结果的目录"></a>创建一个安放编译结果的目录</h2><p>我会将编译的结果放在 /home/jacend/pgSoft/openjdk_7u4/build<br><figure class="highlight arduino"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /<span class="built_in">home</span>/jacend/pgSoft/openjdk_7u4</span><br><span class="line">cd /<span class="built_in">home</span>/jacend/pgSoft/openjdk_7u4</span><br><span class="line"><span class="built_in">mkdir</span> build</span><br></pre></td></tr></table></figure></p>
+<h2 id="创建一个运行编译的脚本"><a href="#创建一个运行编译的脚本" class="headerlink" title="创建一个运行编译的脚本"></a>创建一个运行编译的脚本</h2><p>我们将在解压的源码包中创建一个 build_open_jdk.sh 的脚本并且赋予执行权限</p>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cd</span> /home/jacend/Download/openjdk/</span><br><span class="line">touch build_open_jdk.<span class="keyword">sh</span></span><br><span class="line">sudo chmod +x build_open_jdk.<span class="keyword">sh</span></span><br><span class="line"></span><br><span class="line">sudo gedit build_open_jdk.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure>
+<p>脚本中输入以下内容<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#语言选项</span></span><br><span class="line"><span class="built_in">export</span> LANG=C</span><br><span class="line"><span class="comment">## Bootstarp JDK 的安装路径，也就是我们安装的 openJDk 6 的根目录</span></span><br><span class="line"><span class="built_in">export</span> ALT_BOOTDIR=/usr/lib/jvm/java-6-openjdk-i386</span><br><span class="line"><span class="comment">#允许自动下载依赖</span></span><br><span class="line"><span class="built_in">export</span> ALLOW_DOWNLOADS=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#并行编译的线程数，设置与CPU内核数量一致，我的笔记本为双核CPU，此项可以提高编译速度</span></span><br><span class="line"><span class="built_in">export</span> HOTSPOT_BUILD_JOBS=6</span><br><span class="line"><span class="built_in">export</span> ALT_PARALLEL_COMPILE_JOBS=6</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> SKIP_COMPARE_IMAGES=<span class="literal">true</span></span><br><span class="line"><span class="comment">#使用预编译头文件，不加这个编译会慢很多</span></span><br><span class="line"><span class="built_in">export</span> USE_PRECOMPLIED_HEADER=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#要编译的内容</span></span><br><span class="line"><span class="built_in">export</span> BUILD_LANGTOOLS=<span class="literal">true</span></span><br><span class="line"><span class="built_in">export</span> BUILD_HOTSPOT=<span class="literal">true</span></span><br><span class="line"><span class="built_in">export</span> BUILD_JDK=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#把它设置为 false 可以避开 javaws 和浏览器插件之类的部分的 build</span></span><br><span class="line">BUILD_DEPLOY=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#把它设置为 false 就不会 build 出安装包，因为安装包中有些奇怪的依赖</span></span><br><span class="line"><span class="comment">#但即便不build出它已经可以得到完成的JDK映像了，所以还是不 build 了</span></span><br><span class="line"><span class="built_in">export</span> BUILD_INSTALL=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#编译结果所存在的路径</span></span><br><span class="line"><span class="built_in">export</span> ALT_OUTPUTDIR=/home/jacend/pgSoft/openjdk_7u4/build</span><br><span class="line"></span><br><span class="line"><span class="comment">#这两个编译变量必须去掉，不然编译会出问题</span></span><br><span class="line"><span class="built_in">unset</span> JAVA_HOME</span><br><span class="line"><span class="built_in">unset</span> CLASSPATH</span><br><span class="line"></span><br><span class="line"><span class="comment">#检查设置是否正确</span></span><br><span class="line">make sanity</span><br><span class="line">make 2&gt;&amp;1 |tee <span class="variable">$ALT_OUTPUTDIR</span>/build.log</span><br></pre></td></tr></table></figure></p>
+<h2 id="执行脚本"><a href="#执行脚本" class="headerlink" title="执行脚本"></a>执行脚本</h2><figure class="highlight stata"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cd</span> /home/jacend/Download/openjdk/</span><br><span class="line"><span class="keyword">sh</span> ./build_open_jdk.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure>
+<h1 id="编译过程中的错误"><a href="#编译过程中的错误" class="headerlink" title="编译过程中的错误"></a>编译过程中的错误</h1><p>列举一下编译过程的错误，供大家参考，大家可以预先处理了再执行编译脚本</p>
+<ol>
+<li>error: “__LEAF” redefined [-Werror]<br>碰到这个错误可以 <a href="http://stackoverflow.com/questions/12742128/build-openjdk7-on-ubuntu-12-04" target="_blank" rel="external">参考</a> 在这个环境下应该不会报这个错误</li>
+<li>JVM_FindClassFromCaller<br>修改文件：/home/jacend/Download/openjdk/hotspot/make/linux/Makefile 注释掉包含test_gamma字样的所有行即可</li>
+<li><p>Error: time is more than 10 years from present: 1104530400000</p>
+<p>进入解压后openJDk目录，找到CurencyData.properties,将<strong>所有</strong>涉及到时间修改为10年之内的时间，例如将2004-01-13-20-00-00 修改成 2016-01-13-20-00-00</p>
+ <figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">cd <span class="regexp">/home/</span>jacend<span class="regexp">/Downloads/</span>openjdk<span class="regexp">/jdk/</span>src<span class="regexp">/share/</span>classes<span class="regexp">/java/u</span>til</span><br><span class="line">sudo gedit CurrencyData.properties</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java-basic/" rel="tag">#Java basic</a>
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/25/poems/" rel="next" title="过去写的一些诗">
+                <i class="fa fa-chevron-left"></i> 过去写的一些诗
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/25/JUnit4-入门/" rel="prev" title="JUnit4 入门">
+                JUnit4 入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/25/在Ubuntu-12-04-32位系统中编译OpenJDK-7u40/"
+           data-title="在Ubuntu 12.04 32位系统中编译OpenJDK 7u40" data-url="http://yoursite.com/2016/06/25/在Ubuntu-12-04-32位系统中编译OpenJDK-7u40/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="爪哇岛主" />
+          <p class="site-author-name" itemprop="name">爪哇岛主</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jacendfeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/feng.jacend" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#环境准备"><span class="nav-number">1.</span> <span class="nav-text">环境准备</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenJDK-源码"><span class="nav-number">1.1.</span> <span class="nav-text">OpenJDK 源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Apache-Ant"><span class="nav-number">1.2.</span> <span class="nav-text">Apache Ant</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bootstrap-JDK"><span class="nav-number">1.3.</span> <span class="nav-text">Bootstrap JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装依赖软件命令"><span class="nav-number">1.4.</span> <span class="nav-text">安装依赖软件命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解压JDK源码"><span class="nav-number">1.5.</span> <span class="nav-text">解压JDK源码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译"><span class="nav-number">2.</span> <span class="nav-text">编译</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建一个安放编译结果的目录"><span class="nav-number">2.1.</span> <span class="nav-text">创建一个安放编译结果的目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建一个运行编译的脚本"><span class="nav-number">2.2.</span> <span class="nav-text">创建一个运行编译的脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行脚本"><span class="nav-number">2.3.</span> <span class="nav-text">执行脚本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译过程中的错误"><span class="nav-number">3.</span> <span class="nav-text">编译过程中的错误</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爪哇岛主</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jacendfeng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

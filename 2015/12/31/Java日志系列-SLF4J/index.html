@@ -1,0 +1,694 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java 日志," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="起手式忘了什么时候听老师说过，牛逼的公司只管定义接口，屌丝厂商实现接口，类似 JDBC 的实现便是如此，用在 slf4j, 总觉得有些类似，本来 SUN 有机会在需求产生之前设计一套漂亮的日志框架来一统天下，可惜偏偏要拖到 JDK1.4, 而这套原生的日志框架也没有足够漂亮，而之前早已经经过市场考验的日志框架也在不断持续的改进，log4j,logback, common-logging 等等已经在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java日志系列-SLF4J">
+<meta property="og:url" content="http://yoursite.com/2015/12/31/Java日志系列-SLF4J/index.html">
+<meta property="og:site_name" content="Private Plots">
+<meta property="og:description" content="起手式忘了什么时候听老师说过，牛逼的公司只管定义接口，屌丝厂商实现接口，类似 JDBC 的实现便是如此，用在 slf4j, 总觉得有些类似，本来 SUN 有机会在需求产生之前设计一套漂亮的日志框架来一统天下，可惜偏偏要拖到 JDK1.4, 而这套原生的日志框架也没有足够漂亮，而之前早已经经过市场考验的日志框架也在不断持续的改进，log4j,logback, common-logging 等等已经在">
+<meta property="og:image" content="https://segmentfault.com/img/bVrU6S">
+<meta property="og:updated_time" content="2016-06-25T12:11:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java日志系列-SLF4J">
+<meta name="twitter:description" content="起手式忘了什么时候听老师说过，牛逼的公司只管定义接口，屌丝厂商实现接口，类似 JDBC 的实现便是如此，用在 slf4j, 总觉得有些类似，本来 SUN 有机会在需求产生之前设计一套漂亮的日志框架来一统天下，可惜偏偏要拖到 JDK1.4, 而这套原生的日志框架也没有足够漂亮，而之前早已经经过市场考验的日志框架也在不断持续的改进，log4j,logback, common-logging 等等已经在">
+<meta name="twitter:image" content="https://segmentfault.com/img/bVrU6S">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/12/31/Java日志系列-SLF4J/"/>
+
+  <title> Java日志系列-SLF4J | Private Plots </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Private Plots</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">平凡生活里的英雄梦想</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '2CoWrVS7trX42SYK44FB','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java日志系列-SLF4J
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-31T20:05:55+08:00" content="2015-12-31">
+              2015-12-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/coding/" itemprop="url" rel="index">
+                    <span itemprop="name">coding</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/31/Java日志系列-SLF4J/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/31/Java日志系列-SLF4J/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="起手式"><a href="#起手式" class="headerlink" title="起手式"></a>起手式</h2><p>忘了什么时候听老师说过，牛逼的公司只管定义接口，屌丝厂商实现接口，类似 JDBC 的实现便是如此，用在 slf4j, 总觉得有些类似，本来 SUN 有机会在需求产生之前设计一套漂亮的日志框架来一统天下，可惜偏偏要拖到 JDK1.4, 而这套原生的日志框架也没有足够漂亮，而之前早已经经过市场考验的日志框架也在不断持续的改进，log4j,logback, common-logging 等等已经在许多系统中长久驻足。<br><a id="more"></a></p>
+<p>翻到Java中的日志框架史，看到下面有趣的<a href="http://www.oseye.net/user/kevin/blog/358" target="_blank" rel="external">文字</a></p>
+<blockquote>
+<p>最早出现的日志框架是apache提供的log4j，使用最为广泛，成为了Java日志的事实上的标准；然而当时Sun公司在jdk1.4中增加了JUL(java.util.logging)，企图对抗log4j，于是造成了混乱，当然此时也有其它的一些日志框架的出现，如simplelog等，简直是乱上加乱。<br>解决这种混乱的方案出现了：抽象出一个接口层：于是开源社区提供了commons-logging，被称为JCL。抽象时参考了log4j、JUL、simplelog，对它们进行了适配或转接，这样就一统江湖了。<br>看上去现在已经非常完美了，但好景不长，log4j的作者(Ceki Gülcü)觉得JCL不够优秀，他要搞出一套更优雅的出来，于是slf4j就出现了，并且亲自实现了一个亲子——logback(有点，老子又回来了的感觉^_^)。好吧，确实更优雅了，但混乱局面又出现了，之前使用JCL的怎么办呢，于是Ceki Gülcü在slf4j又对JCL作了桥接转换，然而事情还没完，Ceki Gülcü又回来拯救自己的“大阿哥”——log4j，于是log4j2就诞生了，同时log4j2也加进了slf4j体系中。<br>PS：SLF4J是在Compile绑定实现的，而JCL是Runtime时绑定的。</p>
+</blockquote>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="Apache-user-manual-选译"><a href="#Apache-user-manual-选译" class="headerlink" title="Apache user manual 选译"></a>Apache user manual 选译</h3><p>SLF4J ( The simple logging facade for java ) 作为诸多日志框架的门面或者抽象，这些框架包括java.util.logging， logback 和 log4j. slf4j 允许终端用户在部署系统时想使用插件一样来选择使用不同的日志框架。</p>
+<h4 id="关于如何绑定一个日志框架"><a href="#关于如何绑定一个日志框架" class="headerlink" title="关于如何绑定一个日志框架"></a>关于如何绑定一个日志框架</h4><p>创建工程，将 slf4j-api-1.7.13.jar 加入 class path , 以下程序编译运行</p>
+<figure class="highlight actionscript"><table><tr><td class="code"><pre><span class="line"><span class="meta"><span class="meta-keyword">import</span> org.slf4j.Logger;</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> org.slf4j.LoggerFactory;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">    Logger logger = LoggerFactory.getLogger(HelloWorld.class);</span><br><span class="line">    logger.info(<span class="string">"Hello World"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>控制台输出</p>
+<figure class="highlight avrasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">SLF4J:</span> Failed to load class <span class="string">"org.slf4j.impl.StaticLoggerBinder"</span>.</span><br><span class="line"><span class="symbol">SLF4J:</span> Defaulting to no-operation (<span class="keyword">NOP</span>) logger implementation</span><br><span class="line"><span class="symbol">SLF4J:</span> See http://www.slf4j<span class="meta">.org</span>/codes.html<span class="meta">#StaticLoggerBinder for further details.</span></span><br></pre></td></tr></table></figure>
+<p>可见单纯的 slf4j 只是定义了一套接口，以及其他日志框架的转接器<br>现在我们为 slf4j 绑定最简单的实现，在 classpath 加入  slf4j-simple-1.7.13.jar<br>重新编译运行，控制台输出：</p>
+<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">0 </span>[main] INFO HelloWorld - Hello World</span><br></pre></td></tr></table></figure>
+<h4 id="可以绑定的日志框架的桥接-jars"><a href="#可以绑定的日志框架的桥接-jars" class="headerlink" title="可以绑定的日志框架的桥接 jars"></a>可以绑定的日志框架的桥接 jars</h4><ol>
+<li>slf4j-log4j12-1.7.13.jar<br>log4j 1.2（一个广泛使用的日志框架）版本的桥接器，你可以将 log4j.jar 加入classpath</li>
+<li>slf4j-jdk14-1.7.13.jar<br>java.util.logging 的桥接器，JDK原生日志框架</li>
+<li>slf4j-nop-1.7.13.jar<br>NOP 桥接器，静默丢弃一切日志</li>
+<li>slf4j-simple-1.7.13.jar<br>一个简单实现的桥接器，该实现输出所有事件到 System.err. 只有INFO以及高于该级别的消息被打印，在小型应用中它也许是有用的。</li>
+<li>slf4j-jcl-1.7.13.jar<br>Jakarta Commons Logging 的桥接器. 这个桥接器将SLF4j所有日志委派给 JCL</li>
+<li>logback-classic-1.0.13.jar (requires logback-core-1.0.13.jar)<br>slf4j 的原生实现，logback 直接实现了 slf4j 的接口，因此使用 slf4j 与 logback 的搭配也暗示了严格的零内存计算溢出</li>
+</ol>
+<p><img src="https://segmentfault.com/img/bVrU6S" alt="图片描述"></p>
+<h4 id="未完待补充"><a href="#未完待补充" class="headerlink" title="未完待补充"></a>未完待补充</h4>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java-日志/" rel="tag">#Java 日志</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/25/Java日志系列-原生支持/" rel="next" title="Java日志系列-原生支持">
+                <i class="fa fa-chevron-left"></i> Java日志系列-原生支持
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/06/我的RMI学习笔记-1/" rel="prev" title="我的RMI学习笔记(1)">
+                我的RMI学习笔记(1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/31/Java日志系列-SLF4J/"
+           data-title="Java日志系列-SLF4J" data-url="http://yoursite.com/2015/12/31/Java日志系列-SLF4J/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="爪哇岛主" />
+          <p class="site-author-name" itemprop="name">爪哇岛主</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jacendfeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/feng.jacend" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起手式"><span class="nav-number">1.</span> <span class="nav-text">起手式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Apache-user-manual-选译"><span class="nav-number">2.1.</span> <span class="nav-text">Apache user manual 选译</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于如何绑定一个日志框架"><span class="nav-number">2.1.1.</span> <span class="nav-text">关于如何绑定一个日志框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可以绑定的日志框架的桥接-jars"><span class="nav-number">2.1.2.</span> <span class="nav-text">可以绑定的日志框架的桥接 jars</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#未完待补充"><span class="nav-number">2.1.3.</span> <span class="nav-text">未完待补充</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爪哇岛主</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jacendfeng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

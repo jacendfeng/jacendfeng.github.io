@@ -1,0 +1,871 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java basic,定时任务," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="普通thread实现这是最常见的，创建一个thread，然后让它在while循环里一直运行着，通过sleep方法来达到定时任务的效果。这样可以快速简单的实现，代码如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 定时任务(1)：原生支持">
+<meta property="og:url" content="http://yoursite.com/2014/12/05/Java-定时任务-1-：原生支持/index.html">
+<meta property="og:site_name" content="Private Plots">
+<meta property="og:description" content="普通thread实现这是最常见的，创建一个thread，然后让它在while循环里一直运行着，通过sleep方法来达到定时任务的效果。这样可以快速简单的实现，代码如下：">
+<meta property="og:updated_time" content="2016-06-25T09:45:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 定时任务(1)：原生支持">
+<meta name="twitter:description" content="普通thread实现这是最常见的，创建一个thread，然后让它在while循环里一直运行着，通过sleep方法来达到定时任务的效果。这样可以快速简单的实现，代码如下：">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2014/12/05/Java-定时任务-1-：原生支持/"/>
+
+  <title> Java 定时任务(1)：原生支持 | Private Plots </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Private Plots</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">平凡生活里的英雄梦想</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '2CoWrVS7trX42SYK44FB','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java 定时任务(1)：原生支持
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-12-05T19:29:59+08:00" content="2014-12-05">
+              2014-12-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/coding/" itemprop="url" rel="index">
+                    <span itemprop="name">coding</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/12/05/Java-定时任务-1-：原生支持/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/12/05/Java-定时任务-1-：原生支持/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="普通thread实现"><a href="#普通thread实现" class="headerlink" title="普通thread实现"></a>普通thread实现</h1><p>这是最常见的，创建一个thread，然后让它在while循环里一直运行着，通过sleep方法来达到定时任务的效果。这样可以快速简单的实现，代码如下：</p>
+<a id="more"></a>
+<pre><code>public class Task1 {
+public static void main(String[] args) {
+  // run in a second
+  final long timeInterval = 1000;
+  Runnable runnable = new Runnable() {
+  public void run() {
+    while (true) {
+      // ------- code for task to run
+      System.out.println(&quot;Hello !!&quot;);
+      // ------- ends here
+      try {
+       Thread.sleep(timeInterval);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      }
+    }
+  };
+  Thread thread = new Thread(runnable);
+  thread.start();
+  }
+}
+</code></pre><h1 id="用Timer和TimerTask"><a href="#用Timer和TimerTask" class="headerlink" title="用Timer和TimerTask"></a>用Timer和TimerTask</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>java.util.Timer定时器，实际上是个线程，定时调度所拥有的TimerTasks。<br>一个java.util.TimerTask实际上就是一个拥有run方法的类，需要定时执行的代码放到run方法体内，TimerTask一般是以匿名类的方式创建。<br>上面的实现是非常快速简便的，但它也缺少一些功能。<br>用Timer和TimerTask的话与上述方法相比有如下好处：<br>当启动和去取消任务时可以控制<br>第一次执行任务时可以指定你想要的delay时间<br>在实现时，Timer类可以调度任务，TimerTask则是通过在run()方法里实现具体任务。<br>Timer实例可以调度多任务，它是线程安全的。<br>当Timer的构造器被调用时，它创建了一个线程，这个线程可以用来调度任务。</p>
+<h2 id="下面是代码："><a href="#下面是代码：" class="headerlink" title="下面是代码："></a>下面是代码：</h2><h3 id="Timer-测试类代码："><a href="#Timer-测试类代码：" class="headerlink" title="Timer 测试类代码："></a>Timer 测试类代码：</h3><pre><code>//import java.util.Date;
+import java.util.Timer;
+
+//import com.baibutao.apps.linkshop.uxiang.server.util.DateUtil;
+
+
+public class TestTimerTask {
+
+        public static void main(String[] args){
+            TaskA taskA = new TaskA();
+            Timer timer = new Timer();
+            timer.schedule(taskA, 5 * 1000, 5 * 1000);
+
+            //Date date = DateUtil.parse(&quot;2014-12-04 16:50:00&quot;);
+            //timer.schedule(taskA, date , 5 * 1000);
+            //timer.scheduleAtFixedRate(taskA, date, 5 * 1000);
+        }
+    }
+</code></pre><h3 id="任务类代码："><a href="#任务类代码：" class="headerlink" title="任务类代码："></a>任务类代码：</h3><pre><code>import java.util.Date;
+import java.util.TimerTask;
+
+import wint.lang.utils.DateUtil;
+
+// 定义一个任务类
+public class TaskA extends TimerTask{
+
+    @Override
+    public void run() {
+        System.out.println(DateUtil.formatFullDate(new Date()));
+    }
+
+}
+</code></pre><h3 id="关于Timer类的调用方法："><a href="#关于Timer类的调用方法：" class="headerlink" title="关于Timer类的调用方法："></a>关于Timer类的调用方法：</h3><ul>
+<li>void java.util.Timer.schedule(TimerTask task, long delay)：多长时间（毫秒）后执行任务</li>
+</ul>
+<ul>
+<li>void java.util.Timer.schedule(TimerTask task, Date time)：设定某个时间执行任务</li>
+</ul>
+<ul>
+<li>void java.util.Timer.schedule(TimerTask task, long delay, long period)：delay时间后开始执行任务，并每隔period时间调用任务一次。</li>
+</ul>
+<ul>
+<li>void java.util.Timer.schedule(TimerTask task, Date firstTime, long period)：第一次在指定firstTime时间点执行任务，之后每隔period时间调用任务一次。</li>
+</ul>
+<ul>
+<li>void java.util.Timer.scheduleAtFixedRate(TimerTask task, long delay, long period)：delay时间后开始执行任务，并每隔period时间调用任务一次。</li>
+</ul>
+<ul>
+<li>void java.util.Timer.scheduleAtFixedRate(TimerTask task, long delay, long period)：第一次在指定firstTime时间点执行任务，之后每隔period时间调用任务一次。</li>
+</ul>
+<ul>
+<li>void java.util.Timer.cancel()：终止该Timer</li>
+</ul>
+<ul>
+<li>boolean java.util.TimerTask.cancel()：终止该TimerTask</li>
+</ul>
+<h4 id="为每个Timer指定多个TimerTask"><a href="#为每个Timer指定多个TimerTask" class="headerlink" title="为每个Timer指定多个TimerTask"></a>为每个Timer指定多个TimerTask</h4><p>虽然可通过void java.util.Timer.schedule(TimerTask task, Date firstTime, long period)方法完成“例如：每天上午10点执行一次”的业务，但该实现是基于进行一天（1000 <em> 60 </em> 60 * 24毫秒）进行延迟的机制实现的，并不是指定某个具体时间进行执行的。</p>
+<p>对于该种需求，可通过Quartz来进行实现</p>
+<h4 id="方法名称schedule-和scheduleAtFixedRate-两者的区别"><a href="#方法名称schedule-和scheduleAtFixedRate-两者的区别" class="headerlink" title="方法名称schedule()和scheduleAtFixedRate()两者的区别"></a>方法名称schedule()和scheduleAtFixedRate()两者的区别</h4><p>当需要根据period区间时间循环多次调用任务的时候，会存在两种不同的策略，两种方法提供了不同的策略。<br>调用方法（1）、（2）只是单次执行，不存在多次调用任务的情况，所以没有提供scheduleAtFixedRate方法的调用方式。</p>
+<p><1>schedule()方法更注重保持间隔时间的稳定：保障每隔period时间可调用一次</1></p>
+<p><2>scheduleAtFixedRate()方法更注重保持执行频率的稳定：保障多次调用的频率趋近于period时间，如果某一次调用时间大于period，下一次就会尽量小于period，以保障频率接近于period<br>进一步的说明参见eg366的博客，星星的技术专栏</2></p>
+<h1 id="ScheduledExecutorService"><a href="#ScheduledExecutorService" class="headerlink" title="ScheduledExecutorService"></a>ScheduledExecutorService</h1><p>ScheduledExecutorService是从Java SE 5的java.util.concurrent里，做为并发工具类被引进的，这是最理想的定时任务实现方式。<br>相比于上两个方法，它有以下好处：</p>
+<p>相比于Timer的单线程，它是通过线程池的方式来执行任务的<br>可以很灵活的去设定第一次执行任务delay时间<br>提供了良好的约定，以便设定执行的时间间隔</p>
+<p>下面是实现代码，我们通过ScheduledExecutorService#scheduleAtFixedRate展示这个例子，通过代码里参数的控制，首次执行加了delay时间。<br><figure class="highlight actionscript"><table><tr><td class="code"><pre><span class="line"><span class="meta"><span class="meta-keyword">import</span> java.util.concurrent.Executors;</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> java.util.concurrent.ScheduledExecutorService;</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">import</span> java.util.concurrent.TimeUnit;</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Task3</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) &#123;</span><br><span class="line">    Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">      <span class="keyword">public</span> <span class="keyword">void</span> run() &#123;</span><br><span class="line">        <span class="comment">// task to run goes here</span></span><br><span class="line">        System.out.println(<span class="string">"Hello !!"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    ScheduledExecutorService service = Executors</span><br><span class="line">                    .newSingleThreadScheduledExecutor();</span><br><span class="line">    service.scheduleAtFixedRate(runnable, <span class="number">0</span>, <span class="number">1</span>, TimeUnit.SECONDS);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>关于ScheduledExecutorService 和 Timer的优劣，Timer没有很好的错误处理机制，请参考苦行僧的博客<br>关于ScheduledExecutorService 的具体用法，请参照涛涛的博客</p>
+<h1 id="web容器中利用ServletContextListener实现定时任务"><a href="#web容器中利用ServletContextListener实现定时任务" class="headerlink" title="web容器中利用ServletContextListener实现定时任务"></a>web容器中利用ServletContextListener实现定时任务</h1><p>一个实现ServletContextListener接口的类: StatisticsContextListener.java:<br>```<br>    package com.ed.cnc.servletListener;</p>
+<pre><code>import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import com.ed.cnc.city.StatisticsTask;
+
+/**
+ * 统计ContextListener
+ * @author westd
+ *
+ */
+/**
+ * @author westd
+ *
+ */
+public class StatisticsContextListener implements ServletContextListener
+{
+
+    private java.util.Timer timer = null;
+
+
+    /**
+     * 这个方法在Web应用服务做好接受请求的时候被调用。
+     * 
+     * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
+     */
+    public void contextInitialized(ServletContextEvent event) 
+    {
+        timer = new java.util.Timer(true);
+        event.getServletContext().log(&quot;定时器已启动&quot;); 
+        timer.schedule(new StatisticsTask(event.getServletContext()), 0, 60*60*1000);//每隔1小时
+        event.getServletContext().log(&quot;已经添加任务调度表&quot;);
+    }
+
+
+    /**
+     * 这个方法在Web应用服务被移除，没有能力再接受请求的时候被调用。
+     * 
+     * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
+     */
+    public void contextDestroyed(ServletContextEvent event)
+    {
+        timer.cancel();
+        event.getServletContext().log(&quot;定时器销毁&quot;);
+    }
+
+}
+</code></pre><p>一个继承于TimerTask的一个类：StatisticsTask.java</p>
+<pre><code>package com.ed.cnc.city;
+
+import java.util.Calendar;
+import java.util.TimerTask;
+
+import javax.servlet.ServletContext;
+
+
+/**
+ * 统计任务
+ * @author westd
+ *
+ */
+public class StatisticsTask extends TimerTask
+{
+
+    private static final int STATISTICS_SCHEDULE_HOUR = 0;
+    private static boolean isRunning = false;
+    private ServletContext context = null;
+
+    public StatisticsTask(ServletContext context)
+    {
+        this.context = context;
+    }
+
+    @Override
+    public void run()
+    {
+        Calendar cal = Calendar.getInstance(); 
+        //System.out.println(isRunning);
+        if (!isRunning) 
+        { 
+            if (STATISTICS_SCHEDULE_HOUR == cal.get(Calendar.HOUR_OF_DAY)) //查看是否为凌晨
+            { 
+                isRunning = true; 
+                context.log(&quot;开始执行指定任务&quot;);
+
+                //TODO 添加自定义的详细任务
+                executeTask();
+
+                //指定任务执行结束
+                isRunning = false;
+                context.log(&quot;指定任务执行结束&quot;); 
+            } 
+        } 
+        else 
+        {
+            context.log(&quot;上一次任务执行还未结束&quot;);
+        }
+
+    }
+    /**
+     * 执行任务
+     */
+    public void executeTask()
+    {
+        System.out.println(&quot;任务1&quot;);
+        System.out.println(&quot;任务2&quot;);
+    }
+}
+</code></pre><p>web.xml中添加如下代码：</p>
+<pre><code>&lt;listener&gt;
+        &lt;listener-class&gt;com.ed.cnc.servletListener.StatisticsContextListener&lt;/listener-class&gt;
+&lt;/listener&gt;
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java-basic/" rel="tag">#java basic</a>
+          
+            <a href="/tags/定时任务/" rel="tag">#定时任务</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/01/23/Java-定时任务-2-Spring-定时任务的几种实现/" rel="prev" title="Java 定时任务(2): Spring 定时任务的几种实现">
+                Java 定时任务(2): Spring 定时任务的几种实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/12/05/Java-定时任务-1-：原生支持/"
+           data-title="Java 定时任务(1)：原生支持" data-url="http://yoursite.com/2014/12/05/Java-定时任务-1-：原生支持/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="爪哇岛主" />
+          <p class="site-author-name" itemprop="name">爪哇岛主</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jacendfeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/feng.jacend" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#普通thread实现"><span class="nav-number">1.</span> <span class="nav-text">普通thread实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用Timer和TimerTask"><span class="nav-number">2.</span> <span class="nav-text">用Timer和TimerTask</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下面是代码："><span class="nav-number">2.2.</span> <span class="nav-text">下面是代码：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Timer-测试类代码："><span class="nav-number">2.2.1.</span> <span class="nav-text">Timer 测试类代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任务类代码："><span class="nav-number">2.2.2.</span> <span class="nav-text">任务类代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Timer类的调用方法："><span class="nav-number">2.2.3.</span> <span class="nav-text">关于Timer类的调用方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#为每个Timer指定多个TimerTask"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">为每个Timer指定多个TimerTask</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法名称schedule-和scheduleAtFixedRate-两者的区别"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">方法名称schedule()和scheduleAtFixedRate()两者的区别</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ScheduledExecutorService"><span class="nav-number">3.</span> <span class="nav-text">ScheduledExecutorService</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#web容器中利用ServletContextListener实现定时任务"><span class="nav-number">4.</span> <span class="nav-text">web容器中利用ServletContextListener实现定时任务</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爪哇岛主</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jacendfeng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

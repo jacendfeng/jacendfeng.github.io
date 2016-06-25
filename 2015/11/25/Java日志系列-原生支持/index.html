@@ -1,0 +1,749 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java 日志," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文网大多网络整理所得，出处太多，不一一列举
+简介Java 中的 Logging API 让 Java 应用可以记录不同级别的信息，它在debug过程中非常有用，如果系统因为各种各样的原因而崩溃，崩溃原因可以在日志中清晰地追溯，下面让我们来看看 Java 原生的 Logging 功能。从1.4.2开始，Java 通过 Java.util.logging 包为应用程序提供了记录消息的可能，在 API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java日志系列-原生支持">
+<meta property="og:url" content="http://yoursite.com/2015/11/25/Java日志系列-原生支持/index.html">
+<meta property="og:site_name" content="Private Plots">
+<meta property="og:description" content="本文网大多网络整理所得，出处太多，不一一列举
+简介Java 中的 Logging API 让 Java 应用可以记录不同级别的信息，它在debug过程中非常有用，如果系统因为各种各样的原因而崩溃，崩溃原因可以在日志中清晰地追溯，下面让我们来看看 Java 原生的 Logging 功能。从1.4.2开始，Java 通过 Java.util.logging 包为应用程序提供了记录消息的可能，在 API">
+<meta property="og:image" content="https://segmentfault.com/img/bVrS03">
+<meta property="og:image" content="https://segmentfault.com/img/bVrTGa">
+<meta property="og:image" content="https://segmentfault.com/img/bVrTI4">
+<meta property="og:updated_time" content="2016-06-25T12:12:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java日志系列-原生支持">
+<meta name="twitter:description" content="本文网大多网络整理所得，出处太多，不一一列举
+简介Java 中的 Logging API 让 Java 应用可以记录不同级别的信息，它在debug过程中非常有用，如果系统因为各种各样的原因而崩溃，崩溃原因可以在日志中清晰地追溯，下面让我们来看看 Java 原生的 Logging 功能。从1.4.2开始，Java 通过 Java.util.logging 包为应用程序提供了记录消息的可能，在 API">
+<meta name="twitter:image" content="https://segmentfault.com/img/bVrS03">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/11/25/Java日志系列-原生支持/"/>
+
+  <title> Java日志系列-原生支持 | Private Plots </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Private Plots</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">平凡生活里的英雄梦想</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '2CoWrVS7trX42SYK44FB','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java日志系列-原生支持
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-25T19:32:19+08:00" content="2015-11-25">
+              2015-11-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/coding/" itemprop="url" rel="index">
+                    <span itemprop="name">coding</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/11/25/Java日志系列-原生支持/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/25/Java日志系列-原生支持/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文网大多网络整理所得，出处太多，不一一列举</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Java 中的 Logging API 让 Java 应用可以记录不同级别的信息，它在debug过程中非常有用，如果系统因为各种各样的原因而崩溃，崩溃原因可以在日志中清晰地追溯，下面让我们来看看 Java 原生的 Logging 功能。<br>从1.4.2开始，Java 通过 Java.util.logging 包为应用程序提供了记录消息的可能，在 API 中的核心类为 Logger 类。理解在记录消息中的日志的不同级别是非常重要的。Java 为此定时了8个级别，它们是分别SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST 以及 ALL. 它们按照优先级降序排列，在应用运行的任何时间点，日志级别可以被更改。<br>通常来说，当为 Logger 指定了一个 Level, 该 Logger 会包含当前指定级别以及更高级别的日志。举例而言，如果 Level 被设置成了 WARNING, 所有的 warning 消息以及 SERVER 消息会被记录。应用可以用下列方法记录日志：Logger.warning(), Logger.info(), Logger.config() …<br><a id="more"></a></p>
+<h2 id="工作原理和日志处理流程"><a href="#工作原理和日志处理流程" class="headerlink" title="工作原理和日志处理流程"></a>工作原理和日志处理流程</h2><h3 id="几个重要类的说明"><a href="#几个重要类的说明" class="headerlink" title="几个重要类的说明"></a>几个重要类的说明</h3><ul>
+<li>Logger 对外发布的日志记录器，应用系统可以通过该对象完成日志记录的功能</li>
+<li>Level 日志的记录级别</li>
+<li>LoggingMXBean 接口对象，对外发布的日志管理器</li>
+<li>LogRecord 日志信息描述对象</li>
+<li>LoggerManager 日志管理器</li>
+<li>Filter 日志过滤器，接口对象，在日志被 Handler 处理之前，起过滤作用</li>
+<li>Handler 日志处理器，接口对象，决定日志的输出方式</li>
+<li>Formatter 日志格式化转换器，接口对象，决定日志的输出格式<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3>首先通过LoggerManager进行日志框架的初始化，生成Logger的根节点RootLogger. 这里需要注意的是LoggerManager的初始化工作，并没有将构建配置文件中所有的日志对象，而仅仅是构建了根节点，这种方式就是我们多例模式中经常用到的懒加载，对象只有在真正被时候的时候，再进行构建。<br>通过Logger.getLogger(String name) 获取一个已有的Logger对象或者是新建一个Logger对象。Logger,日志记录器，这就是在应用程序中需要调用的对象了，通过Logger对象的一系列log方法，<h3 id="Logger的大致处理流程"><a href="#Logger的大致处理流程" class="headerlink" title="Logger的大致处理流程"></a>Logger的大致处理流程</h3><img src="https://segmentfault.com/img/bVrS03" alt="图片描述"><br>收到应用程序的记录请求，将参数中的日志信息和运行时的信息构建出LogRecord对象，而后通过Logger对象本身设置的记录级别和调用者传递进来的日志级别，如果传递进来的日志级别低于Logger对象本身设置的记录级别（从语义上的理解，而实际上语义级别越高的级别其内部用数字表示的标志的数值越小），那么Logger对象将直接返回，因为他认为这条日志信息，在当前运行环境中，没有必要记录。<br>而满足以上条件的日志信息，将会通过Logger对象的filter元素的过滤校验，filter是动态的，在运行时是可以随意设置的，如果有filter对象，那么将调用filter对象，对日志对象LogRecord进行校验，只有校验通过的LogRecord对象，才会继续往下执行。<br>通过filter校验后，Logger对象将依次调用其配置的处理器，通过处理器来真正实现日志的记录功能，一个Logger对象可以配置多个处理器handler,所以一条日志记录可以被多个处理器处理，同时Logger对象的实现是树形结构，如果Logger对象设置其可以继承其父节点的处理器（默认），一条日志记录还会被其父节点的Logger对象处理。  而handler的处理方式就会是形形色色了，但是归根节点，会有以下几个大的步骤： </li>
+</ul>
+<ol>
+<li>级别的判定和比较，决定某条具体的日志记录是否应该继续处理 </li>
+<li>将日志记录做格式化处理，以达到输出的日志在格式上统一，美观，可读性高。 3. 资源的释放，不管是以何种方式记录日志，总是会消耗一些方面的资源，所以<br>会涉及到资源的释放问题。比如以文件方式记录的日志的，在一定的时候需要做文件关闭操作，以报文方式发送日志的，在和远程通话的过程中，也需要涉及到网络IO的关闭操作，或者是存储在数据库等等，资源释放在程序开发过程中，是个不变的主题。  </li>
+</ol>
+<h2 id="从一个示例讲起"><a href="#从一个示例讲起" class="headerlink" title="从一个示例讲起"></a>从一个示例讲起</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> TestLogger &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		Logger <span class="built_in">log</span> = Logger.getLogger(<span class="string">"lavasoft"</span>);</span><br><span class="line">		<span class="built_in">log</span>.info(<span class="string">"aaa"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console output:</span><br><span class="line">&gt;&gt;&gt; aaa</span><br></pre></td></tr></table></figure>
+<p>以上简单的代码背后发生那些事</p>
+<ol>
+<li>LoggerManager 将会返回一个新的或者已经存在的同名的 Logger , 首先会查找是否有同名 Logger 被 namedLoggers 维护有则返回, 但是在我们这个示例中大多是重新生成一个 Logger，首先 LoggerManager 会读取系统配置，设定一个默认的的 INFO 级别的 Logger, 然后也许跟其他线程抢到一个 Logger 后返回<br>tips:<br>默认的Java日志框架将其配置存储到一个名为 logging.properties 的文件中。<br>在这个文件中，每行是一个配置项，配置项使用点标记（dot notation）的形式。<br>Java在其安装目录的lib文件夹下面安装了一个全局配置文件，但在启动一个Java程序时，<br>你可以通过指定 java.util.logging.config.file 属性的方式来使用一个单独的日志配置文件，<br>同样也可以在个人项目中创建和存储 logging.properties 文件。</li>
+</ol>
+<h4 id="Logger-中召唤-LoggerManager-片段"><a href="#Logger-中召唤-LoggerManager-片段" class="headerlink" title="Logger 中召唤 LoggerManager 片段"></a>Logger 中召唤 LoggerManager 片段</h4><figure class="highlight aspectj"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function">Logger <span class="title">getLogger</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    LogManager manager = LogManager.getLogManager();</span><br><span class="line">    <span class="function"><span class="keyword">return</span> manager.<span class="title">demandLogger</span><span class="params">(name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="LoggerManager-中-产生-Logger-的片段"><a href="#LoggerManager-中-产生-Logger-的片段" class="headerlink" title="LoggerManager 中 产生 Logger 的片段"></a>LoggerManager 中 产生 Logger 的片段</h4><figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">Logger demandLogger(String <span class="built_in">name</span>) &#123;</span><br><span class="line">    Logger <span class="literal">result</span> = getLogger(<span class="built_in">name</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">result</span> == null) &#123;</span><br><span class="line">        Logger newLogger = new Logger(<span class="built_in">name</span>, null);</span><br><span class="line">        do &#123;</span><br><span class="line">            <span class="keyword">if</span> (addLogger(newLogger)) &#123;</span><br><span class="line"><span class="built_in">                return</span> newLogger;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="literal">result</span> = getLogger(<span class="built_in">name</span>);</span><br><span class="line">        &#125; <span class="keyword">while</span> (<span class="literal">result</span> == null);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="built_in">    return</span> <span class="literal">result</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="LoggerManager-中维护了一个有继承关系的含有弱引用的-LoggerWeakRef"><a href="#LoggerManager-中维护了一个有继承关系的含有弱引用的-LoggerWeakRef" class="headerlink" title="LoggerManager 中维护了一个有继承关系的含有弱引用的 LoggerWeakRef"></a>LoggerManager 中维护了一个有继承关系的含有弱引用的 LoggerWeakRef</h4><p><code>private Hashtable&lt;String,LoggerWeakRef&gt; namedLoggers = new Hashtable&lt;&gt;();</code>  </p>
+<h4 id="LoggerWeakRef-类结构"><a href="#LoggerWeakRef-类结构" class="headerlink" title="LoggerWeakRef 类结构"></a>LoggerWeakRef 类结构</h4><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">LoggerWeakRef</span> <span class="keyword">extends</span> <span class="title">WeakReference&lt;Logger&gt;</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">String</span>                name;       <span class="comment">// for namedLoggers cleanup</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">LogNode</span>               node;       <span class="comment">// for loggerRef cleanup</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">WeakReference</span>&lt;<span class="type">Logger</span>&gt; parentRef;  <span class="comment">// for kids cleanup</span></span><br></pre></td></tr></table></figure>
+<p>以上两者维护了JVM中弱引用的 Loggers 父子结构</p>
+<p><code>log.info()</code><br>​       </p>
+<h4 id="Logger-中的-info-String-msg-方法"><a href="#Logger-中的-info-String-msg-方法" class="headerlink" title="Logger 中的 info(String msg) 方法"></a>Logger 中的 info(String msg) 方法</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">info</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (Level.INFO.intValue() &lt; levelValue) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">log</span>(Level.INFO, msg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">上面说过默认 LoggerManager 产生的 Logger 日志级别默认为 INFO ，所以这里默认的</span><br><span class="line">levelValue 为 Level.INFO.intValue()</span><br><span class="line"></span><br><span class="line">如果这里 Level.INFO.intValue() 低于 levelValue 的 , 将 <span class="keyword">do</span> nothing</span><br></pre></td></tr></table></figure>
+<h4 id="调用-log-Level-level-String-msg-方法"><a href="#调用-log-Level-level-String-msg-方法" class="headerlink" title="调用 log(Level level, String msg) 方法"></a>调用 log(Level level, String msg) 方法</h4><figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="literal">void</span> <span class="keyword">log</span>(Level level, <span class="built_in">String</span> msg) &#123;</span><br><span class="line">    <span class="keyword">if</span> (level.intValue() &lt; levelValue || levelValue == offValue) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    LogRecord lr = <span class="literal">new</span> LogRecord(level, msg);</span><br><span class="line">    doLog(lr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的 log.info 方法只是 log(Level level, String msg) 方法简单封装，在这里日志级别为 Level.OFF.intValue() 也 do nothing  了，否则创建真正的 LogRecord 对象</p>
+<h4 id="调用-doLog-LogRecord-lr-方法"><a href="#调用-doLog-LogRecord-lr-方法" class="headerlink" title="调用 doLog(LogRecord lr) 方法"></a>调用 doLog(LogRecord lr) 方法</h4><figure class="highlight armasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">private</span> void doLog(LogRecord <span class="built_in">lr</span>) &#123;</span><br><span class="line">    <span class="built_in">lr</span>.setLoggerName(name)<span class="comment">;</span></span><br><span class="line">    <span class="keyword">String </span>ebname = getEffectiveResourceBundleName()<span class="comment">;</span></span><br><span class="line">    <span class="meta">if</span> (ebname != null) &#123;</span><br><span class="line">        <span class="built_in">lr</span>.setResourceBundleName(ebname)<span class="comment">;</span></span><br><span class="line">        <span class="built_in">lr</span>.setResourceBundle(findResourceBundle(ebname))<span class="comment">;</span></span><br><span class="line">    &#125;</span><br><span class="line">    log(<span class="built_in">lr</span>)<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>getEffectiveResourceBundleName()</code>将一直上溯查找有效的 resourceBundleName , 有可能返回 null</p>
+<h4 id="调用-log-LogRecord-lr-方法"><a href="#调用-log-LogRecord-lr-方法" class="headerlink" title="调用 log(LogRecord lr) 方法"></a>调用 log(LogRecord lr) 方法</h4><figure class="highlight aspectj"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">log</span><span class="params">(LogRecord record)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (record.getLevel().intValue() &lt; levelValue || levelValue == offValue) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Filter theFilter = filter;</span><br><span class="line">    <span class="keyword">if</span> (theFilter != <span class="keyword">null</span> &amp;&amp; !theFilter.isLoggable(record)) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Post the LogRecord to all our Handlers, and then to</span></span><br><span class="line">    <span class="comment">// our parents' handlers, all the way up the tree.</span></span><br><span class="line"></span><br><span class="line">    Logger logger = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">while</span> (logger != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (Handler <span class="keyword">handler</span> : logger.getHandlers()) &#123;</span><br><span class="line">            <span class="keyword">handler</span>.publish(record);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!logger.getUseParentHandlers()) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        logger = logger.getParent();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里我们可以看到了 <code>Filter</code> 与 <code>Handler</code> 的出现，我们可以使用 <code>setFilter(Filter newFilter)</code>与 <code>addHandler(Handler handler)</code> 来为 <code>Logger</code>添加<code>Filter</code>与<code>Handler</code>这里我们可以看出在 while 循环中会先对当前所有 <code>handler</code>输出，在上溯所有父<code>Logger</code>所有<code>Handler</code><br>    输出，至此两句代码解析结束。</p>
+<h2 id="话说-Filter"><a href="#话说-Filter" class="headerlink" title="话说 Filter"></a>话说 Filter</h2><p>作为一个接口, Filter:为所记录的日志提供日志级别控制以外的细粒度控制。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLoggable</span><span class="params">(LogRecord record)</span></span>;&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以实现一个 Filter 接口的的对象来使用，下面是示例代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyFilter</span> <span class="keyword">implements</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLoggable</span><span class="params">(LogRecord record)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> 在这里我们可以添加自己的一些逻辑进去</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">// 返回 false 则不被记录日志， true 则被记录日志</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们为 Logger 对象设定 Filter 对象  </p>
+<figure class="highlight vbscript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Filter</span> <span class="built_in">filter</span> = <span class="keyword">new</span> MyFilter();</span><br><span class="line">logger1.setFilter(<span class="built_in">filter</span>);</span><br></pre></td></tr></table></figure>
+<p>或者我们也可以为 Handler 对象设定 Filter 对象</p>
+<figure class="highlight vbscript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Filter</span> <span class="built_in">filter</span> = <span class="keyword">new</span> MyFilter();</span><br><span class="line">ConsoleHandler consoleHandler = <span class="keyword">new</span> ConsoleHandler();</span><br><span class="line">consoleHandler.setLevel(Level.ALL);</span><br><span class="line">consoleHandler.setFilter(<span class="built_in">filter</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="话说-Handler"><a href="#话说-Handler" class="headerlink" title="话说 Handler"></a>话说 Handler</h2><p>先上一张 <code>java.util.logging</code> 包中有关 <code>Handler</code> 的类图<br><img src="https://segmentfault.com/img/bVrTGa" alt="图片描述"><br><code>Handler</code>负责从<code>Logger</code>中取出日志消息并将消息发送出去，比如发送到控制台、文件、网络上的其他日志服务或操作系统日志等。<br><code>Handler</code>也具有级别概念，用于判断当前<code>Logger</code>中的消息是否应该被发送出去，可以使用定义好的各种日志级别（如Level.OFF表示关闭等）。<br>除了级别概念，一个<code>Handler</code>还可以具有自己的过滤器（Filter）、格式化器（Formatter）、错误管理器（ErrorManager）以及编码字符集等，这些属性借助LogManager中的配置信息进行设置。<br>Handler是一个抽象类，需要根据实际情况创建真正使用的具体Handler（如ConsoleHandler、FileHandler等），实现各自的publish、flush以及close等方法。<br>对几种具体实现 Handler 类的类做简单说明</p>
+<ol>
+<li><p>MemoryHandler，将当前日志信息写入内存缓冲区中同时丢弃缓存中以前的内容。将内存缓冲区中的信息转发至另一个Handler</p>
+</li>
+<li><p>StreamHandler所有基于I/O流的Handler的基类，将日志信息发送至给定的java.io.OutputStream中</p>
+</li>
+<li><p>ConsoleHandler，将消息发送至System.err（而非System.out），默认配置与其父类StreamHandler相同。</p>
+</li>
+<li>FileHandler，将消息发送至单个一般文件或一个可回滚的文件集合。可回滚文件集中的文件依据文件大小进行回滚，久文件名称通过当前文件名附加编号0、1、2等方式依次进行标示。默认情况下日志信息都存放在I/O缓冲中，但如果一条完整的日志信息会触发清空缓冲的动作。与其父类StramHandler不同的是，FileHandler的默认格式器是java.util.logging.XMLFormatter：</li>
+<li>SocketHandler，负责将日志信息发送至网络，默认情况下也采用java.util.logging.XMLFormatter格式。</li>
+</ol>
+<h4 id="关于-MemoryHandler"><a href="#关于-MemoryHandler" class="headerlink" title="关于 MemoryHandler"></a>关于 MemoryHandler</h4><p>MemoryHandler 使用了典型的“注册 - 通知”的观察者模式。MemoryHandler 先注册到对自己感兴趣的 Logger 中（logger.addHandler(handler)），在这些 Logger 调用发布日志的 API：log()、logp()、logrb() 等，遍历这些 Logger 下绑定的所有 Handlers 时，通知触发自身 publish（LogRecord）方法的调用，将日志写入 buffer，当转储到下一个日志发布平台的条件成立，转储日志并清空 buffer。</p>
+<p>这里的 buffer 是 MemoryHandler 自身维护一个可自定义大小的循环缓冲队列，来保存所有运行时触发的 Exception 日志条目。同时在构造函数中要求指定一个 Target Handler，用于承接输出；在满足特定 flush buffer 的条件下，如日志条目等级高于 MemoryHandler 设定的 push level 等级（实例中定义为 SEVERE）等，将日志移交至下一步输出平台。从而形成如下日志转储输出链：<br><img src="https://segmentfault.com/img/bVrTI4" alt="图片描述"></p>
+<h5 id="MemoryHandler-使用方式"><a href="#MemoryHandler-使用方式" class="headerlink" title="MemoryHandler 使用方式"></a>MemoryHandler 使用方式</h5><p>以上是记录产品 Exception 错误日志，以及如何转储的 MemoryHandler 处理的内部细节；接下来给出 MemoryHandler 的一些使用方式。</p>
+<ol>
+<li><p>直接使用 java.util.logging 中的 MemoryHandler</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在 buffer 中维护 5 条日志信息</span></span><br><span class="line"><span class="comment">// 仅记录 Level 大于等于 Warning 的日志条目并</span></span><br><span class="line"><span class="comment">// 刷新 buffer 中的日志条目到 fileHandler 中处理</span></span><br><span class="line"><span class="keyword">int</span> bufferSize = <span class="number">5</span>; </span><br><span class="line">f = <span class="keyword">new</span> FileHandler(<span class="string">"testMemoryHandler.log"</span>); </span><br><span class="line">m = <span class="keyword">new</span> MemoryHandler(f, bufferSize, Level.WARNING); </span><br><span class="line">myLogger = Logger.getLogger(<span class="string">"com.ibm.test"</span>); </span><br><span class="line">myLogger.addHandler(m); </span><br><span class="line">myLogger.<span class="built_in">log</span>(Level.WARNING, “<span class="keyword">this</span> is a WARNING <span class="built_in">log</span>”);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自定义（反射）<br>思考自定义 MyHandler 继承自 MemoryHandler 的场景，由于无法直接使用作为父类私有属性的 size、buffer 及 buffer 中的 cursor，如果在 MyHandler 中有获取和改变这些属性的需求，一个途径是使用反射。清单 5 展示了使用反射读取用户配置并设置私有属性。</p>
+</li>
+</ol>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="built_in">int</span> m_size;</span><br><span class="line"><span class="built_in">String</span> sizeString = manager.getProperty(loggerName + <span class="string">".size"</span>);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">null</span> != sizeString) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        m_size = Integer.parseInt(sizeString);</span><br><span class="line">        <span class="keyword">if</span> (m_size &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            m_size = BUFFER_SIZE; <span class="comment">// default 1000</span></span><br><span class="line">            <span class="comment">// 通过 java 反射机制获取私有属性</span></span><br><span class="line">            Field f;</span><br><span class="line">            f = getClass().getSuperclass().getDeclaredField(<span class="string">"size"</span>);</span><br><span class="line">            f.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            f.setInt(<span class="keyword">this</span>, m_size);</span><br><span class="line">            f = getClass().getSuperclass().getDeclaredField(<span class="string">"buffer"</span>);</span><br><span class="line">            f.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            f.<span class="keyword">set</span>(<span class="keyword">this</span>, <span class="keyword">new</span> LogRecord[m_size]);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>自定义（重写）<br>直接使用反射方便快捷，适用于对父类私有属性无频繁访问的场景。思考这样一种场景，默认环形队列无法满足我们存储需求，此时不妨令自定义的 MyMemoryHandler 直接继承 Handler，直接对存储结构进行操作，可以通过清单 6 实现。  </p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyMemoryHandler</span> <span class="keyword">extends</span> <span class="title">Handler</span></span>&#123; </span><br><span class="line"> <span class="comment">// 默认存储 LogRecord 的缓冲区容量</span></span><br><span class="line"> <span class="keyword">private</span> static <span class="keyword">final</span> int <span class="type">DEFAULT_SIZE</span> = <span class="number">1000</span>; </span><br><span class="line"> <span class="comment">// 设置缓冲区大小</span></span><br><span class="line"> <span class="keyword">private</span> int size = <span class="type">DEFAULT_SIZE</span>; </span><br><span class="line"> <span class="comment">// 设置缓冲区</span></span><br><span class="line"> <span class="keyword">private</span> <span class="type">LogRecord</span>[] buffer; </span><br><span class="line"> <span class="comment">// 参考 java.util.logging.MemoryHandler 实现其它部分</span></span><br><span class="line"> ... </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="logging-properties-文件"><a href="#logging-properties-文件" class="headerlink" title="logging.properties 文件"></a>logging.properties 文件</h2><p>默认的 logging.properties 存放在 jre/lib/logging.properties，截取有效的配置项</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><span class="line"><span class="attr">handlers=</span> java.util.logging.ConsoleHandler</span><br><span class="line">.<span class="attr">level=</span> INFO</span><br><span class="line">java.util.logging.FileHandler.<span class="attr">pattern</span> = %h/java%u.log</span><br><span class="line">java.util.logging.FileHandler.<span class="attr">limit</span> = <span class="number">50000</span></span><br><span class="line">java.util.logging.FileHandler.<span class="attr">count</span> = <span class="number">1</span></span><br><span class="line">java.util.logging.FileHandler.<span class="attr">formatter</span> = java.util.logging.XMLFormatter</span><br><span class="line">java.util.logging.ConsoleHandler.<span class="attr">level</span> = INFO</span><br><span class="line">java.util.logging.ConsoleHandler.<span class="attr">formatter</span> = java.util.logging.SimpleFormatter</span><br><span class="line">com.xyz.foo.<span class="attr">level</span> = SEVERE</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java-日志/" rel="tag">#Java 日志</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/02/linux-时区与时间错误修复经历/" rel="next" title="linux 时区与时间错误修复经历">
+                <i class="fa fa-chevron-left"></i> linux 时区与时间错误修复经历
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/31/Java日志系列-SLF4J/" rel="prev" title="Java日志系列-SLF4J">
+                Java日志系列-SLF4J <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/11/25/Java日志系列-原生支持/"
+           data-title="Java日志系列-原生支持" data-url="http://yoursite.com/2015/11/25/Java日志系列-原生支持/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="爪哇岛主" />
+          <p class="site-author-name" itemprop="name">爪哇岛主</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jacendfeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/feng.jacend" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作原理和日志处理流程"><span class="nav-number">2.</span> <span class="nav-text">工作原理和日志处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#几个重要类的说明"><span class="nav-number">2.1.</span> <span class="nav-text">几个重要类的说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作原理"><span class="nav-number">2.2.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logger的大致处理流程"><span class="nav-number">2.3.</span> <span class="nav-text">Logger的大致处理流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从一个示例讲起"><span class="nav-number">3.</span> <span class="nav-text">从一个示例讲起</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Logger-中召唤-LoggerManager-片段"><span class="nav-number">3.0.1.</span> <span class="nav-text">Logger 中召唤 LoggerManager 片段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoggerManager-中-产生-Logger-的片段"><span class="nav-number">3.0.2.</span> <span class="nav-text">LoggerManager 中 产生 Logger 的片段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoggerManager-中维护了一个有继承关系的含有弱引用的-LoggerWeakRef"><span class="nav-number">3.0.3.</span> <span class="nav-text">LoggerManager 中维护了一个有继承关系的含有弱引用的 LoggerWeakRef</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LoggerWeakRef-类结构"><span class="nav-number">3.0.4.</span> <span class="nav-text">LoggerWeakRef 类结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Logger-中的-info-String-msg-方法"><span class="nav-number">3.0.5.</span> <span class="nav-text">Logger 中的 info(String msg) 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用-log-Level-level-String-msg-方法"><span class="nav-number">3.0.6.</span> <span class="nav-text">调用 log(Level level, String msg) 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用-doLog-LogRecord-lr-方法"><span class="nav-number">3.0.7.</span> <span class="nav-text">调用 doLog(LogRecord lr) 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用-log-LogRecord-lr-方法"><span class="nav-number">3.0.8.</span> <span class="nav-text">调用 log(LogRecord lr) 方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#话说-Filter"><span class="nav-number">4.</span> <span class="nav-text">话说 Filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#话说-Handler"><span class="nav-number">5.</span> <span class="nav-text">话说 Handler</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于-MemoryHandler"><span class="nav-number">5.0.1.</span> <span class="nav-text">关于 MemoryHandler</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#MemoryHandler-使用方式"><span class="nav-number">5.0.1.1.</span> <span class="nav-text">MemoryHandler 使用方式</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logging-properties-文件"><span class="nav-number">6.</span> <span class="nav-text">logging.properties 文件</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爪哇岛主</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jacendfeng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,738 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux， 血泪史," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="问题产生昨晚后台的图片服务挂了，折腾之后发现是服务器的时间不对,于是看了一下Linux下面关于时区与时间相关的命令
+[root@root:~] $ date -RTue, 31 Mar 2015 13:58:25 +0400[root@root:~] $
+北京时间为 +8000 时区，所以上述的时区设置不对于是使用 tzselect 命令设置时区">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux 时区与时间错误修复经历">
+<meta property="og:url" content="http://yoursite.com/2015/04/02/linux-时区与时间错误修复经历/index.html">
+<meta property="og:site_name" content="Private Plots">
+<meta property="og:description" content="问题产生昨晚后台的图片服务挂了，折腾之后发现是服务器的时间不对,于是看了一下Linux下面关于时区与时间相关的命令
+[root@root:~] $ date -RTue, 31 Mar 2015 13:58:25 +0400[root@root:~] $
+北京时间为 +8000 时区，所以上述的时区设置不对于是使用 tzselect 命令设置时区">
+<meta property="og:updated_time" content="2016-06-25T11:13:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux 时区与时间错误修复经历">
+<meta name="twitter:description" content="问题产生昨晚后台的图片服务挂了，折腾之后发现是服务器的时间不对,于是看了一下Linux下面关于时区与时间相关的命令
+[root@root:~] $ date -RTue, 31 Mar 2015 13:58:25 +0400[root@root:~] $
+北京时间为 +8000 时区，所以上述的时区设置不对于是使用 tzselect 命令设置时区">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/04/02/linux-时区与时间错误修复经历/"/>
+
+  <title> linux 时区与时间错误修复经历 | Private Plots </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Private Plots</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">平凡生活里的英雄梦想</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '2CoWrVS7trX42SYK44FB','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                linux 时区与时间错误修复经历
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-04-02T18:36:28+08:00" content="2015-04-02">
+              2015-04-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/coding/" itemprop="url" rel="index">
+                    <span itemprop="name">coding</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/04/02/linux-时区与时间错误修复经历/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/02/linux-时区与时间错误修复经历/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="问题产生"><a href="#问题产生" class="headerlink" title="问题产生"></a>问题产生</h3><p>昨晚后台的图片服务挂了，折腾之后发现是服务器的时间不对,于是看了一下Linux下面关于时区与时间相关的命令</p>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">[root<span class="variable">@root</span><span class="symbol">:~</span>] <span class="variable">$ </span>date -R</span><br><span class="line">Tue, <span class="number">31</span> Mar <span class="number">2015</span> <span class="number">13</span><span class="symbol">:</span><span class="number">58</span><span class="symbol">:</span><span class="number">25</span> +<span class="number">0400</span></span><br><span class="line">[root<span class="variable">@root</span><span class="symbol">:~</span>] $</span><br></pre></td></tr></table></figure>
+<p>北京时间为 +8000 时区，所以上述的时区设置不对<br>于是使用 tzselect 命令设置时区</p>
+<a id="more"></a>
+<ul>
+<li>首先选择洲</li>
+</ul>
+<figure class="highlight gams"><table><tr><td class="code"><pre><span class="line">[root@root:~] <span class="symbol">$</span> tzselect</span><br><span class="line">Please identify a location so that time zone rules can be <span class="keyword">set</span> correctly.</span><br><span class="line">Please <span class="comment">select a continent or ocean.</span></span><br><span class="line"> 1) Africa</span><br><span class="line"> 2) Americas</span><br><span class="line"> 3) Antarctica</span><br><span class="line"> 4) Arctic <span class="comment">Ocean</span></span><br><span class="line"> 5) Asia</span><br><span class="line"> 6) Atlantic <span class="comment">Ocean</span></span><br><span class="line"> 7) Australia</span><br><span class="line"> 8) Europe</span><br><span class="line"> 9) Indian <span class="comment">Ocean</span></span><br><span class="line">10) Pacific <span class="comment">Ocean</span></span><br><span class="line">11) none <span class="comment">- I want to specify the time zone using the Posix TZ format.</span></span><br><span class="line">#? 5</span><br></pre></td></tr></table></figure>
+<ul>
+<li>选择国家</li>
+</ul>
+<figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line">Please select a country.</span><br><span class="line"> <span class="number">1</span>) Afghanistan           <span class="number">18</span>) Israel                <span class="number">35</span>) Palestine</span><br><span class="line"> <span class="number">2</span>) Armenia               <span class="number">19</span>) <span class="keyword">Japan </span>                <span class="number">36</span>) Philippines</span><br><span class="line"> <span class="number">3</span>) Azerbaijan            <span class="number">20</span>) <span class="keyword">Jordan </span>               <span class="number">37</span>) Qatar</span><br><span class="line"> <span class="number">4</span>) <span class="keyword">Bahrain </span>              <span class="number">21</span>) Kazakhstan            <span class="number">38</span>) Russia</span><br><span class="line"> <span class="number">5</span>) <span class="keyword">Bangladesh </span>           <span class="number">22</span>) Korea (<span class="keyword">North) </span>        <span class="number">39</span>) Saudi Arabia</span><br><span class="line"> <span class="number">6</span>) <span class="keyword">Bhutan </span>               <span class="number">23</span>) Korea (South)         <span class="number">40</span>) Singapore</span><br><span class="line"> <span class="number">7</span>) <span class="keyword">Brunei </span>               <span class="number">24</span>) Kuwait                <span class="number">41</span>) Sri Lanka</span><br><span class="line"> <span class="number">8</span>) Cambodia              <span class="number">25</span>) Kyrgyzstan            <span class="number">42</span>) Syria</span><br><span class="line"> <span class="number">9</span>) China                 <span class="number">26</span>) Laos                  <span class="number">43</span>) Taiwan</span><br><span class="line"><span class="number">10</span>) Cyprus                <span class="number">27</span>) Lebanon               <span class="number">44</span>) Tajikistan</span><br><span class="line"><span class="number">11</span>) East Timor            <span class="number">28</span>) Macau                 <span class="number">45</span>) Thailand</span><br><span class="line"><span class="number">12</span>) Georgia               <span class="number">29</span>) Malaysia              <span class="number">46</span>) Turkmenistan</span><br><span class="line"><span class="number">13</span>) Hong Kong             <span class="number">30</span>) Mongolia              <span class="number">47</span>) United Arab Emirates</span><br><span class="line"><span class="number">14</span>) India                 <span class="number">31</span>) Myanmar (<span class="keyword">Burma) </span>      <span class="number">48</span>) Uzbekistan</span><br><span class="line"><span class="number">15</span>) Indonesia             <span class="number">32</span>) Nepal                 <span class="number">49</span>) Vietnam</span><br><span class="line"><span class="number">16</span>) Iran                  <span class="number">33</span>) Oman                  <span class="number">50</span>) Yemen</span><br><span class="line"><span class="number">17</span>) Iraq                  <span class="number">34</span>) Pakistan</span><br><span class="line"><span class="comment">#? 9</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>选择城市</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">Please <span class="keyword">select</span> one <span class="keyword">of</span> the <span class="keyword">following</span> <span class="keyword">time</span> zone regions.</span><br><span class="line"><span class="number">1</span>) east China - Beijing, Guangdong, Shanghai, etc.</span><br><span class="line"><span class="number">2</span>) Heilongjiang (<span class="keyword">except</span> Mohe), Jilin</span><br><span class="line"><span class="number">3</span>) central China - Sichuan, Yunnan, Guangxi, Shaanxi, Guizhou, etc.</span><br><span class="line"><span class="number">4</span>) most <span class="keyword">of</span> Tibet &amp; Xinjiang</span><br><span class="line"><span class="number">5</span>) west Tibet &amp; Xinjiang</span><br><span class="line">#? <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>确定</li>
+</ul>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">The following information <span class="built_in">has</span> been given:</span><br><span class="line"></span><br><span class="line">        China</span><br><span class="line">        east China - Beijing, Guangdong, Shanghai, etc.</span><br><span class="line"></span><br><span class="line">Therefore TZ=<span class="string">'Asia/Shanghai'</span> will <span class="keyword">be</span> used.</span><br><span class="line">Local time <span class="keyword">is</span> <span class="keyword">no</span><span class="variable">w:</span>      Tue Mar <span class="number">31</span> <span class="number">14</span>:<span class="number">04</span>:<span class="number">49</span> CST <span class="number">2015</span>.</span><br><span class="line">Universal Time <span class="keyword">is</span> <span class="keyword">no</span><span class="variable">w:</span>  Tue Mar <span class="number">31</span> <span class="number">06</span>:<span class="number">04</span>:<span class="number">49</span> UTC <span class="number">2015</span>.</span><br><span class="line">Is the above information OK?</span><br><span class="line"><span class="number">1</span>) Yes</span><br><span class="line"><span class="number">2</span>) No</span><br><span class="line">#? <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>系统给出提示</li>
+</ul>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">You can make this change permanent <span class="keyword">for</span> yourself <span class="keyword">by</span> appending <span class="keyword">the</span> <span class="built_in">line</span></span><br><span class="line">        TZ=<span class="string">'Asia/Shanghai'</span>; export TZ</span><br><span class="line"><span class="built_in">to</span> <span class="keyword">the</span> <span class="built_in">file</span> <span class="string">'.profile'</span> <span class="keyword">in</span> your home <span class="built_in">directory</span>; <span class="keyword">then</span> <span class="built_in">log</span> out <span class="keyword">and</span> <span class="built_in">log</span> <span class="keyword">in</span> again.</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">Here <span class="keyword">is</span> <span class="keyword">that</span> TZ value again, this <span class="built_in">time</span> <span class="keyword">on</span> standard output so <span class="keyword">that</span> you</span><br><span class="line">can use <span class="keyword">the</span> /usr/bin/tzselect command <span class="keyword">in</span> shell scripts:</span><br><span class="line">Asia/Shanghai</span><br></pre></td></tr></table></figure>
+<ul>
+<li>我们对当前用户改变时区，所以需要修改 /ect/profile 文件 ,并用source 命令使他生效  </li>
+</ul>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">[root<span class="variable">@root</span><span class="symbol">:~</span>] <span class="variable">$ </span>vim /etc/profile</span><br><span class="line">在 profile 文件中追加 TZ=<span class="string">'Asia/Shanghai'</span>; export TZ</span><br><span class="line">[root<span class="variable">@root</span><span class="symbol">:~</span>] <span class="variable">$ </span>source /etc/profile</span><br></pre></td></tr></table></figure>
+<ul>
+<li>做了上述操作之后服务器的时间正确了，图片服务也没有出现因为时间不对签名校验失败的情况，图片正常上传  </li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-attr">[root@root~]</span># <span class="selector-tag">date</span> <span class="selector-tag">-R</span></span><br><span class="line"><span class="selector-tag">Thu</span>, 02 <span class="selector-tag">Apr</span> 2015 11<span class="selector-pseudo">:36</span><span class="selector-pseudo">:44</span> +0800</span><br></pre></td></tr></table></figure>
+<h3 id="第二天问题重现"><a href="#第二天问题重现" class="headerlink" title="第二天问题重现"></a>第二天问题重现</h3><p>第二天到公司发现在开发中的APP 接口参数签名错误，结果发现又是时间不对，上服务器一看，时间不正确了，明明昨天已经调回到东八区正确的时间了？</p>
+<p>团队其他人处理这个问题，没搞定，于是自己接着解决，上服务器一看：  </p>
+<p><code>[root@root~]# date -R</code><br><code>date: multiple output formats specified</code></p>
+<p>date -R 以及 date 下面所有带参数命令失效，无语了<br><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-attr">[root@root~]</span># <span class="selector-tag">clock</span></span><br><span class="line"><span class="selector-tag">Thu</span> 02 <span class="selector-tag">Apr</span> 2015 11<span class="selector-pseudo">:47</span><span class="selector-pseudo">:33</span> <span class="selector-tag">AM</span> <span class="selector-tag">UTC</span> <span class="selector-tag">-0</span><span class="selector-class">.395946</span> <span class="selector-tag">seconds</span></span><br></pre></td></tr></table></figure></p>
+<p>UTC 如果使用UTC，那么也应该倒退8个小时才行（因为北京时间 UTC +8），决定直接调整为 CTS(China Standard Time) 时间</p>
+<p>网上搜索需要修改 /ect/localtime 文件  </p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">[root@root/]<span class="comment"># cd /etc/</span></span><br><span class="line">[root@root/]<span class="comment"># ll</span></span><br><span class="line">lrwxrwxrwx   <span class="number">1</span> root root     <span class="number">34</span> Mar <span class="number">31</span> <span class="number">15</span><span class="symbol">:</span>09 localtime -&gt; <span class="regexp">/usr/share</span><span class="regexp">/zoneinfo/</span>Asia/Shanghai</span><br></pre></td></tr></table></figure>
+<p>发现该文件软连接到了 /usr/share/zoneinfo/Asia/Shanghai 现在这个指向实际上是昨天通过 tzselect 命令选择的<br>但是时间还是不对，我们查看 /usr/share/zoneinfo/Asia/Shanghai 文件  </p>
+<figure class="highlight mel"><table><tr><td class="code"><pre><span class="line">[root@root Asia]# cd /usr/share/zoneinfo/Asia/</span><br><span class="line">[root@root Asia]# vim Shanghai</span><br><span class="line">TZif2^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^@^@^C^@^@^@^@^@^@^@^Q^@^@^@^C^@^@^@^L°þ&lt;<span class="number">9</span>a&gt;&lt;<span class="number">9</span>b&gt;È\^A&lt;<span class="number">80</span>&gt;Èú<span class="string">'pÉÕ^N&lt;80&gt;ÊÛZð^^º6^@^_i^?p ~h&lt;80&gt;!Iap"^J&lt;80&gt;#)Cp$Gg^@%^R_ð&amp;'</span>I^@&amp;òAð(^G+^@(Ò#ð^B^A^B^A^B^A^B^A^B^A^B^A^B^A^B^A^B^@^@qå^@^@^@^@~&lt;<span class="number">90</span>&gt;^A^D^@^@p&lt;<span class="number">80</span>&gt;^@^HLMT^@CDT^@CST^@^@^@^@^@^@^@TZif2^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^C^@^@^@^C^@^@^@^@^@^@^@^Q^@^@^@^C^@^@^@^Lÿÿÿÿ°þ&lt;<span class="number">9</span>a&gt;&lt;<span class="number">9</span>b&gt;ÿÿÿÿÈ\^A&lt;<span class="number">80</span>&gt;ÿÿÿÿÈú<span class="string">'pÿÿÿÿÉÕ^N&lt;80&gt;ÿÿÿÿÊÛZð^@^@^@^@^^º6^@^@^@^@^@^_i^?p^@^@^@^@ ~h&lt;80&gt;^@^@^@^@!Iap^@^@^@^@"^J&lt;80&gt;^@^@^@^@#)Cp^@^@^@^@$Gg^@^@^@^@^@%^R_ð^@^@^@^@&amp;'</span>I^@^@^@^@^@&amp;òAð^@^@^@^@(^G+^@^@^@^@^@(Ò#ð^B^A^B^A^B^A^B^A^B^A^B^A^B^A^B^A^B^@^@qå^@^@^@^@~&lt;<span class="number">90</span>&gt;^A^D^@^@p&lt;<span class="number">80</span>&gt;^@^HLMT^@CDT^@CST^@^@^@^@^@^@^@</span><br><span class="line">UTC<span class="number">-8</span></span><br></pre></td></tr></table></figure>
+<p>仔细比对另一台时间正确的服务器发现上述文件中末尾的 <strong>UTC-8</strong> 时间上应该是<strong>CTS-8</strong><br>最后询问后得知是同事修改了该文件，果断把该文件末尾修改为 <strong>CTS-8</strong></p>
+<ul>
+<li><p>最关建的一步来了<br>我们一般使用“date -s”命令来修改系统时间。<br>比如将系统时间设定成2011年07月15日的命令如下。<br><code>#date -s 07/15/2011</code><br>将系统时间设定成下午3点12分0秒的命令如下。<br><code>#date -s 15:12:00</code><br>注意，这里说的是系统时间，是linux由操作系统维护的。</p>
+</li>
+<li><p>在系统启动时，Linux操作系统将时间从CMOS中读到系统时间变量中，以后修改时间通过修改系统时间实现。为了保持系统时间与CMOS时间的一致性，Linux每隔一段时间（大约是11分钟）会将系统时间写入CMOS。由于该同步是每隔一段时间进行的，在我们执行date-s后，如果马上重起机器，修改时间就有可能没有被写入CMOS,这就是问题的原因。如果要确保修改生效可以执行如下命令<br><code>#clock -w</code><br>这个命令强制把系统时间写入CMOS。</p>
+</li>
+<li><p>下一步<br><code>[root@root ]# clock -w</code><br><code>[root@root ]# clock</code><br><code>Thu 02 Apr 2015 11:47:33 AM CTS-0.395946 seconds</code>  </p>
+</li>
+</ul>
+<p>至此，时间终于正确了，下一次Linux cmos写入也不会将时间改错了，实际上前一天做的工作就差这最后一步。  </p>
+<h3 id="date-R-以及其他带参数命令错误的解决"><a href="#date-R-以及其他带参数命令错误的解决" class="headerlink" title="date -R 以及其他带参数命令错误的解决"></a>date -R 以及其他带参数命令错误的解决</h3><p>搞了半天不知道什么原因造成的，<a href="http://segmentfault.com/q/1010000002636850" target="_blank" rel="external">上来提问</a><br>大神建议：</p>
+<blockquote>
+<p>看看是不是环境变量被污染了，用“which date”看看你启动的这个date命令是不是built-in的date命令，再用”whereis<br>date”看看哪些目录都有”date”这个命令，默认是/bin/date的</p>
+</blockquote>
+<p>于是上服务器一看：  </p>
+<pre><code>[root@rootetc]# which date
+alias date +&quot;%Y%M%D&quot;
+/usr/bin/date
+</code></pre><p>一问同事他给系统默认 date 起了别名<br><code>[root@root etc]# date -R</code><br>实际上<br><code>[root@root etc]# date +&quot;%Y%M%D&quot; -R</code><br>所以错了：<br>查看alias 的所有条目<br><code>[root@rootetc]# alias</code><br><code>alias cp=&#39;cp -i&#39;</code><br><code>alias egrep=&#39;egrep --color=auto&#39;</code><br><code>alias fgrep=&#39;fgrep --color=auto&#39;</code><br><code>alias grep=&#39;grep --color=auto&#39;</code><br><code>alias l.=&#39;ls -d .* --color=auto&#39;</code><br><code>alias ll=&#39;ls -l --color=auto&#39;</code><br><code>alias ls=&#39;ls --color=auto&#39;</code><br><code>alias mv=&#39;mv -i&#39;</code><br><code>alias rm=&#39;rm -i&#39;</code><br><code>alias which=&#39;alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde&#39;</code><br><code>alias date +&quot;%Y%M%D&quot;</code><br>使用 unalias 命令将 date 的别名取消<br><code>[root@root etc]# unalias date</code><br><code>[root@root etc]# date -R</code><br><code>Thu, 02 Apr 2015 13:02:00 +0800</code><br>现在 date 命令已经可以正常使用</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux，-血泪史/" rel="tag">#Linux， 血泪史</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/03/27/linux-crontab-定时任务/" rel="next" title="linux crontab 定时任务">
+                <i class="fa fa-chevron-left"></i> linux crontab 定时任务
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/25/Java日志系列-原生支持/" rel="prev" title="Java日志系列-原生支持">
+                Java日志系列-原生支持 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/04/02/linux-时区与时间错误修复经历/"
+           data-title="linux 时区与时间错误修复经历" data-url="http://yoursite.com/2015/04/02/linux-时区与时间错误修复经历/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="爪哇岛主" />
+          <p class="site-author-name" itemprop="name">爪哇岛主</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jacendfeng" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/feng.jacend" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题产生"><span class="nav-number">1.</span> <span class="nav-text">问题产生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二天问题重现"><span class="nav-number">2.</span> <span class="nav-text">第二天问题重现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#date-R-以及其他带参数命令错误的解决"><span class="nav-number">3.</span> <span class="nav-text">date -R 以及其他带参数命令错误的解决</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爪哇岛主</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jacendfeng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
