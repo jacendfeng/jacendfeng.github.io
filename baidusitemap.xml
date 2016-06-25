@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2016/06/25/poems/</loc>
+    <lastmod>2016-06-25T03:41:58.000Z</lastmod>
+    <data>
+        <display>
+        <title>过去写的一些诗</title>
+        <pubTime>2016-06-25T01:55:48.000Z</pubTime>
+        
+        <tag>诗与远方</tag>
+         
+         
+           
+             
+              <breadCrumb title="life" url="http://yoursite.com/categories/life/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2016/06/24/hello-world/</loc>
-    <lastmod>2016-06-25T01:49:48.000Z</lastmod>
+    <lastmod>2016-06-25T03:39:54.000Z</lastmod>
     <data>
         <display>
         <title>Hot days in 2016</title>
