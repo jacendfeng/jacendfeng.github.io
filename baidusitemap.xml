@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://yoursite.com/2016/04/01/Java-keywords/</loc>
+    <lastmod>2016-06-25T03:51:08.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java 关键词</title>
+        <pubTime>2016-04-01T08:14:11.000Z</pubTime>
+        
+        <tag>Java basic</tag>
+         
+         
+           
+             
+              <breadCrumb title="coding" url="http://yoursite.com/categories/coding/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2016/06/25/poems/</loc>
     <lastmod>2016-06-25T03:41:58.000Z</lastmod>
     <data>
@@ -37,26 +57,6 @@
            
              
               <breadCrumb title="life" url="http://yoursite.com/categories/life/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2016/04/01/Java-keywords/</loc>
-    <lastmod>2016-06-25T01:48:30.000Z</lastmod>
-    <data>
-        <display>
-        <title>Java 关键词</title>
-        <pubTime>2016-04-01T08:14:11.000Z</pubTime>
-        
-        <tag>Java basic</tag>
-         
-         
-           
-             
-              <breadCrumb title="coding" url="http://yoursite.com/categories/coding/"/>
           
         </display>
     </data>
