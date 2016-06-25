@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2016/04/01/Java-%E5%85%B3%E9%94%AE%E8%AF%8D/</loc>
+    <lastmod>2016-06-25T01:38:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>Java 关键词</title>
+        <pubTime>2016-04-01T08:14:11.000Z</pubTime>
+        
+        <tag>Java basic</tag>
+         
+         
+           
+             
+              <breadCrumb title="coding" url="http://yoursite.com/categories/coding/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2016/06/24/hello-world/</loc>
-    <lastmod>2016-06-24T07:39:06.000Z</lastmod>
+    <lastmod>2016-06-25T01:37:42.000Z</lastmod>
     <data>
         <display>
         <title>Hot days in 2016</title>
