@@ -278,6 +278,130 @@
             
               
                 
+                <a class="post-title-link" href="/2015/04/02/linux-时区与时间错误修复经历/" itemprop="url">
+                  linux 时区与时间错误修复经历
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-04-02T18:36:28+08:00" content="2015-04-02">
+              2015-04-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/coding/" itemprop="url" rel="index">
+                    <span itemprop="name">coding</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/04/02/linux-时区与时间错误修复经历/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/02/linux-时区与时间错误修复经历/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="问题产生"><a href="#问题产生" class="headerlink" title="问题产生"></a>问题产生</h3><p>昨晚后台的图片服务挂了，折腾之后发现是服务器的时间不对,于是看了一下Linux下面关于时区与时间相关的命令</p>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line">[root<span class="variable">@root</span><span class="symbol">:~</span>] <span class="variable">$ </span>date -R</span><br><span class="line">Tue, <span class="number">31</span> Mar <span class="number">2015</span> <span class="number">13</span><span class="symbol">:</span><span class="number">58</span><span class="symbol">:</span><span class="number">25</span> +<span class="number">0400</span></span><br><span class="line">[root<span class="variable">@root</span><span class="symbol">:~</span>] $</span><br></pre></td></tr></table></figure>
+<p>北京时间为 +8000 时区，所以上述的时区设置不对<br>于是使用 tzselect 命令设置时区</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/04/02/linux-时区与时间错误修复经历/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/03/27/linux-crontab-定时任务/" itemprop="url">
                   linux crontab 定时任务
                 </a>
@@ -1169,7 +1293,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1186,7 +1310,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1242,8 +1366,8 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
